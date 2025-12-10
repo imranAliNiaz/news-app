@@ -1,0 +1,30 @@
+{
+  "type": "SharedSlice",
+  "id": "search_bar",
+  "name": "SearchBar",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Default layout with a heading and a search input field with placeholder text.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "single": "heading2",
+            "label": "Title"
+          }
+        },
+        "input_placeholder": {
+          "type": "Text",
+          "config": {
+            "label": "Input Placeholder"
+          }
+        }
+      }
+    }
+  ]
+}

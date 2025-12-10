@@ -1,0 +1,73 @@
+{
+  "type": "SharedSlice",
+  "id": "main_navigation",
+  "name": "MainNavigation",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Standard horizontal navigation bar with logo, nav links, and utility icons.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "logo": {
+          "type": "Image",
+          "config": {
+            "label": "Logo"
+          }
+        },
+        "nav_links": {
+          "type": "Group",
+          "config": {
+            "label": "Navigation Links",
+            "fields": {
+              "label": {
+                "type": "Text",
+                "config": {
+                  "label": "Label"
+                }
+              },
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "Link",
+                  "allowText": false,
+                  "repeat": false,
+                  "select": null
+                }
+              }
+            }
+          }
+        },
+        "profile_link": {
+          "type": "Link",
+          "config": {
+            "label": "Profile Link",
+            "allowText": false,
+            "repeat": false,
+            "select": null
+          }
+        },
+        "search_link": {
+          "type": "Link",
+          "config": {
+            "label": "Search Link",
+            "allowText": false,
+            "repeat": false,
+            "select": null
+          }
+        },
+        "menu_link": {
+          "type": "Link",
+          "config": {
+            "label": "Menu Link",
+            "allowText": false,
+            "repeat": false,
+            "select": null
+          }
+        }
+      }
+    }
+  ]
+}

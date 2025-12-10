@@ -1,0 +1,30 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"label": {
+				"__TYPE__": "FieldContent",
+				"value": "nine",
+				"type": "Text"
+			},
+			"message": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Tempor amet ut id consectetur aute cupidatat nisi officia mollit qui reprehenderit cillum. Consequat velit amet ullamco voluptate in. Enim mollit Lorem consectetur consectetur sit est commodo officia minim velit enim exercitation aute sunt et."
+						}
+					}
+				]
+			},
+			"background_color": {
+				"__TYPE__": "FieldContent",
+				"value": "#e19be5",
+				"type": "Color"
+			}
+		},
+		"items": []
+	}
+]

@@ -1,0 +1,118 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default_horizontal_list",
+		"primary": {
+			"cards": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"thumbnail_image",
+								{
+									"__TYPE__": "ImageContent",
+									"origin": {
+										"id": "main",
+										"url": "https://images.unsplash.com/photo-1607582278038-6bebbd4d7b72",
+										"width": 4010,
+										"height": 4010
+									},
+									"url": "https://images.unsplash.com/photo-1607582278038-6bebbd4d7b72",
+									"width": 4010,
+									"height": 4010,
+									"edit": {
+										"zoom": 1,
+										"crop": {
+											"x": 0,
+											"y": 0
+										},
+										"background": "transparent"
+									},
+									"alt": "list"
+								}
+							],
+							[
+								"title",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "heading3",
+											"content": {
+												"text": "Curve"
+											}
+										}
+									]
+								}
+							],
+							[
+								"description",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "paragraph",
+											"content": {
+												"text": "Dolore ad aliquip mollit nulla commodo elit."
+											}
+										}
+									]
+								}
+							],
+							[
+								"timestamp",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "bring",
+									"type": "Text"
+								}
+							],
+							[
+								"author",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "bring",
+									"type": "Text"
+								}
+							],
+							[
+								"read_time",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "star",
+									"type": "Text"
+								}
+							],
+							[
+								"likes_count",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "59",
+									"type": "Number"
+								}
+							],
+							[
+								"comments_count",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "81",
+									"type": "Number"
+								}
+							],
+							[
+								"liked",
+								{
+									"__TYPE__": "BooleanContent",
+									"value": false
+								}
+							]
+						]
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

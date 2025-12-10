@@ -1,0 +1,36 @@
+{
+  "type": "SharedSlice",
+  "id": "announcement_bar",
+  "name": "AnnouncementBar",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Basic announcement bar with a label and message text.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "label": {
+          "type": "Text",
+          "config": {
+            "label": "Label"
+          }
+        },
+        "message": {
+          "type": "StructuredText",
+          "config": {
+            "multi": "paragraph,strong,em,hyperlink",
+            "label": "Message"
+          }
+        },
+        "background_color": {
+          "type": "Color",
+          "config": {
+            "label": "Background Color"
+          }
+        }
+      }
+    }
+  ]
+}

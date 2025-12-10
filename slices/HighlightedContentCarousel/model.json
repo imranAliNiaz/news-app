@@ -1,0 +1,72 @@
+{
+  "type": "SharedSlice",
+  "id": "highlighted_content_carousel",
+  "name": "HighlightedContentCarousel",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Basic horizontally scrollable carousel of featured content items, each containing an image, label, title, description, and optional metadata.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "section_title": {
+          "type": "Text",
+          "config": {
+            "label": "Section Title"
+          }
+        },
+        "items": {
+          "type": "Group",
+          "config": {
+            "label": "Items",
+            "fields": {
+              "media": {
+                "type": "Image",
+                "config": {
+                  "label": "Media"
+                }
+              },
+              "category_label": {
+                "type": "Text",
+                "config": {
+                  "label": "Category Label"
+                }
+              },
+              "title": {
+                "type": "StructuredText",
+                "config": {
+                  "single": "heading3,strong",
+                  "label": "Title"
+                }
+              },
+              "description": {
+                "type": "StructuredText",
+                "config": {
+                  "multi": "paragraph,strong,em",
+                  "label": "Description"
+                }
+              },
+              "item_link": {
+                "type": "Link",
+                "config": {
+                  "label": "Item Link",
+                  "allowText": false,
+                  "repeat": false,
+                  "select": null
+                }
+              },
+              "is_featured": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Is Featured"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

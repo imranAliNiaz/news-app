@@ -1,0 +1,81 @@
+{
+  "type": "SharedSlice",
+  "id": "featured_content_cards",
+  "name": "FeaturedContentCards",
+  "variations": [
+    {
+      "id": "default_horizontal_list",
+      "name": "Horizontal List",
+      "description": "Displays multiple content cards in a horizontal (side-by-side) layout. Each card contains structured information about an article or content piece.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "cards": {
+          "type": "Group",
+          "config": {
+            "label": "Cards",
+            "fields": {
+              "thumbnail_image": {
+                "type": "Image",
+                "config": {
+                  "label": "Thumbnail Image"
+                }
+              },
+              "title": {
+                "type": "StructuredText",
+                "config": {
+                  "single": "heading3,strong",
+                  "label": "Title"
+                }
+              },
+              "description": {
+                "type": "StructuredText",
+                "config": {
+                  "multi": "paragraph,strong,em,hyperlink",
+                  "label": "Description"
+                }
+              },
+              "timestamp": {
+                "type": "Text",
+                "config": {
+                  "label": "Timestamp"
+                }
+              },
+              "author": {
+                "type": "Text",
+                "config": {
+                  "label": "Author"
+                }
+              },
+              "read_time": {
+                "type": "Text",
+                "config": {
+                  "label": "Read Time"
+                }
+              },
+              "likes_count": {
+                "type": "Number",
+                "config": {
+                  "label": "Likes Count"
+                }
+              },
+              "comments_count": {
+                "type": "Number",
+                "config": {
+                  "label": "Comments Count"
+                }
+              },
+              "liked": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Liked by User"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "type": "SharedSlice",
+  "id": "simple_footer",
+  "name": "SimpleFooter",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "description": "Standard footer with logo, copyright, multiple link groups, and icons.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "logo": {
+          "type": "Image",
+          "config": {
+            "label": "Logo"
+          }
+        },
+        "copyright_text": {
+          "type": "Text",
+          "config": {
+            "label": "Copyright Text",
+            "placeholder": "copyright 2020 | NBC NEWS"
+          }
+        },
+        "legal_links": {
+          "type": "Group",
+          "config": {
+            "label": "Legal Links",
+            "fields": {
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "Legal Link",
+                  "allowText": true,
+                  "repeat": false,
+                  "select": null
+                }
+              }
+            }
+          }
+        },
+        "navigation_links": {
+          "type": "Group",
+          "config": {
+            "label": "Navigation Links",
+            "fields": {
+              "link": {
+                "type": "Link",
+                "config": {
+                  "label": "Navigation Link",
+                  "allowText": true,
+                  "repeat": false,
+                  "select": null
+                }
+              }
+            }
+          }
+        },
+        "social_links": {
+          "type": "Group",
+          "config": {
+            "label": "Social Links",
+            "fields": {
+              "icon_link": {
+                "type": "Link",
+                "config": {
+                  "label": "Icon Link",
+                  "allowText": false,
+                  "repeat": false,
+                  "select": null
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

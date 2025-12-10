@@ -1,0 +1,67 @@
+{
+  "type": "SharedSlice",
+  "id": "feature_article",
+  "name": "FeatureArticle",
+  "variations": [
+    {
+      "id": "image_left_text_right",
+      "name": "Image Left, Text Right",
+      "description": "An article highlight section with image on the left and text (headline, summary, meta info) on the right.",
+      "version": "initial",
+      "imageUrl": "",
+      "docURL": "...",
+      "primary": {
+        "main_image": {
+          "type": "Image",
+          "config": {
+            "label": "Main Image"
+          }
+        },
+        "tag": {
+          "type": "Text",
+          "config": {
+            "label": "Tag/Category"
+          }
+        },
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "single": "heading2",
+            "label": "Title"
+          }
+        },
+        "summary": {
+          "type": "StructuredText",
+          "config": {
+            "single": "paragraph,strong,em,hyperlink",
+            "label": "Summary"
+          }
+        },
+        "post_time": {
+          "type": "Text",
+          "config": {
+            "label": "Post Time"
+          }
+        },
+        "author_name": {
+          "type": "Text",
+          "config": {
+            "label": "Author Name"
+          }
+        },
+        "read_time": {
+          "type": "Text",
+          "config": {
+            "label": "Read Time"
+          }
+        },
+        "show_icons": {
+          "type": "Boolean",
+          "config": {
+            "label": "Show Action Icons"
+          }
+        }
+      }
+    }
+  ]
+}

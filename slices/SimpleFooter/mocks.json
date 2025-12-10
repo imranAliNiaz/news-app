@@ -1,0 +1,101 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"logo": {
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+					"width": 3456,
+					"height": 4320
+				},
+				"url": "https://images.unsplash.com/photo-1551739440-5dd934d3a94a",
+				"width": 3456,
+				"height": 4320,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"alt": "everyone",
+				"credits": null,
+				"__TYPE__": "ImageContent"
+			},
+			"copyright_text": {
+				"__TYPE__": "FieldContent",
+				"value": "rain",
+				"type": "Text"
+			},
+			"legal_links": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"link",
+								{
+									"key": "85f39e7b-2985-43f4-adb3-f93b4d7d28ce",
+									"__TYPE__": "LinkContent",
+									"value": {
+										"__TYPE__": "ExternalLink",
+										"url": "https://prismic.io",
+										"text": "refer"
+									}
+								}
+							]
+						]
+					}
+				]
+			},
+			"navigation_links": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"link",
+								{
+									"key": "940cc6b4-f24c-4989-9789-5ea85aace730",
+									"__TYPE__": "LinkContent",
+									"value": {
+										"__TYPE__": "ExternalLink",
+										"url": "https://slicemachine.dev",
+										"text": "ability"
+									}
+								}
+							]
+						]
+					}
+				]
+			},
+			"social_links": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"icon_link",
+								{
+									"key": "8c5779e7-34b5-40c6-9dfd-2a752d8c4b4e",
+									"__TYPE__": "LinkContent",
+									"value": {
+										"__TYPE__": "ExternalLink",
+										"url": "http://twitter.com"
+									}
+								}
+							]
+						]
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]
