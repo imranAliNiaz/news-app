@@ -33,14 +33,19 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
           <PrismicNextImage
             field={slice.primary.main_image}
             className="w-full h-full object-cover"
+            fallbackAlt="" 
           />
 
           {/* 🌟 Overlay title for small screens */}
           <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-6 lg:hidden">
-            <h2 className="text-white text-2xl sm:text-3xl font-bold leading-tight">
-              <PrismicRichText field={slice.primary.title} />
-            </h2>
-          </div>
+  <div className="text-white text-2xl sm:text-3xl font-bold leading-tight">
+    <PrismicRichText field={slice.primary.title} />
+  </div>
+</div><div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-6 lg:hidden">
+  <div className="text-white text-2xl sm:text-3xl font-bold leading-tight">
+    <PrismicRichText field={slice.primary.title} />
+  </div>
+</div>
         </div>
       </div>
 
