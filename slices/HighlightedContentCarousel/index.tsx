@@ -15,7 +15,7 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
   slice,
 }) => {
   // if your repeatable zone is slice.items, swap this
-  const items = slice.primary.items || [];
+  const items = (slice.primary.items as any[]) || [];
 
   // Build slides: [[item0, item1], [item2, item3], ...]
   const slides = useMemo(() => {
