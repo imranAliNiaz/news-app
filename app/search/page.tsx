@@ -1,9 +1,7 @@
 // app/search/page.tsx
-import { SliceZone } from "@prismicio/react";
-import { components } from "@/slices";
 import { getTopStories, searchNews } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
-import SearchNewsGrid from "@/app/components/SearchNewsGrid";
+import SearchClient from "@/app/components/SearchClient";
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -39,31 +37,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F4F6F8]">
-      {/* Header */}
-      <SliceZone slices={header.data.slices} components={components} />
-
-      {/* Main content */}
-      <main className="flex-1">
-        {/* Search section */}
-        <SliceZone slices={searchBar.data.slices} components={components} />
-
-        {/* Search results with same UI as home */}
-        <SearchNewsGrid stories={stories} title={title} />
-
-        {/* Optional: show message if no matches */}
-        {query && stories.length === 0 && (
-          <p className="mx-auto max-w-3xl px-4 pb-16 text-center text-sm text-slate-500">
-            No articles found matching{" "}
-            <span className="font-semibold">"{query}"</span>.
-          </p>
-        )}
-      </main>
-
-      {/* Footer */}
-      <footer className="mt-auto">
-        <SliceZone slices={footer.data.slices} components={components} />
-      </footer>
-    </div>
+    <SearchClient
+      stories={stories}
+      title={title}
+      query={query}
+      slicesData={{ header, searchBar, footer }}
+    />
   );
 }

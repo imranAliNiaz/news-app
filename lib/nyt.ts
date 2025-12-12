@@ -121,7 +121,7 @@ export async function searchNews(query: string): Promise<NytStory[]> {
       const best = [...doc.multimedia].sort(
         (a, b) => (b.width ?? 0) - (a.width ?? 0)
       )[0];
-      
+
 
       const rawUrl: string = best?.url ?? "";
 
@@ -161,3 +161,46 @@ export async function searchNews(query: string): Promise<NytStory[]> {
 
   return stories;
 }
+
+/**
+ * 🗂️ Map a navigation label to a valid NYT API section
+ * Supports automatic mapping with fallback to "world"
+ */
+export function mapCategoryToSection(label: string): string {
+  const validSections = [
+    "arts", "automobiles", "books", "business", "fashion", "food",
+    "health", "home", "insider", "magazine", "movies", "nyregion",
+    "obituaries", "opinion", "politics", "realestate", "science",
+    "sports", "sundayreview", "technology", "theater", "t-magazine",
+    "travel", "upshot", "us", "world"
+  ];
+
+  const normalized = label.toLowerCase().trim();
+
+  // Direct match
+  if (validSections.includes(normalized)) {
+    return normalized;
+  }
+
+  // Common mappings
+  const mappings: Record<string, string> = {
+    "tech": "technology",
+    "entertainment": "arts",
+    "movies": "movies",
+    "film": "movies",
+    "real estate": "realestate",
+    "property": "realestate",
+    "usa": "us",
+    "united states": "us",
+    "international": "world",
+    "global": "world",
+  };
+
+  if (mappings[normalized]) {
+    return mappings[normalized];
+  }
+
+  // Fallback to world
+  return "world";
+}
+

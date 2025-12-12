@@ -7,19 +7,54 @@ import { FiGrid, FiList } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
+import { useNewsCategory } from "./NewsProvider";
 
 interface TopStoriesGridProps {
-  stories: NytStory[];
+  initialStories?: NytStory[];
   title?: string;
 }
 
 export default function TopStoriesGrid({
-  stories,
+  initialStories = [],
   title = "Top Stories",
 }: TopStoriesGridProps) {
+  const { selectedCategory } = useNewsCategory();
   const tabs = ["Latest Stories", "Opinion", "Health"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
+  const [stories, setStories] = useState<NytStory[]>(initialStories);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch stories when category changes
+  useEffect(() => {
+    const fetchStories = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const response = await fetch(
+          `/api/top-stories?section=${encodeURIComponent(selectedCategory)}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch stories");
+        }
+
+        const data = await response.json();
+        setStories(data.results.slice(0, 6)); // Show first 6 cards
+      } catch (err) {
+        console.error("Error fetching stories:", err);
+        setError("Failed to load news. Please try again.");
+        setStories([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStories();
+  }, [selectedCategory]);
+
 
   return (
     <>
@@ -31,16 +66,15 @@ export default function TopStoriesGrid({
 
         {/* Tabs */}
         <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-2">
-          <div className="flex items-center gap-6 text-xl md:text-sm">
+          <div className="flex items-center gap-4 md:gap-6 text-sm md:text-base">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-1 transition ${
-                  activeTab === tab
-                    ? "border-b-2 border-red-500 font-semibold text-slate-900"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
+                className={`pb-1 transition ${activeTab === tab
+                  ? "border-b-2 border-red-500 font-semibold text-slate-900 cursor-pointer"
+                  : "text-slate-600 hover:text-slate-900 cursor-pointer"
+                  }`}
               >
                 {tab}
               </button>
@@ -48,25 +82,48 @@ export default function TopStoriesGrid({
           </div>
 
           <div className="hidden md:flex items-center gap-3 text-slate-500">
-            <button className="p-1 hover:text-slate-900">
+            <button className="p-1 hover:text-slate-900 transition">
               <FiGrid size={16} />
             </button>
-            <button className="p-1 hover:text-slate-900">
+            <button className="p-1 hover:text-slate-900 transition">
               <FiList size={16} />
             </button>
           </div>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C31815]"></div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
+            {error}
+          </div>
+        )}
+
         {/* Cards grid */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {stories.map((story) => (
-            <NewsCard
-              key={story.url}
-              story={story}
-              onClick={() => setSelectedStory(story)}
-            />
-          ))}
-        </div>
+        {!loading && !error && (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {stories.map((story) => (
+              <NewsCard
+                key={story.url}
+                story={story}
+                onClick={() => setSelectedStory(story)}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!loading && !error && stories.length === 0 && (
+          <div className="text-center py-20 text-slate-500">
+            <p className="text-lg">No stories available for this category.</p>
+          </div>
+        )}
 
         {/* VIEW MORE */}
         <div className="mt-5 flex justify-center">
@@ -185,9 +242,9 @@ function NewsModal({
   const publishedLabel = isNaN(published.getTime())
     ? ""
     : published.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
+      month: "short",
+      day: "numeric",
+    });
 
   const author = story.byline?.replace(/^By\s+/i, "") || "New York Times";
 

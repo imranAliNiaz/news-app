@@ -1,6 +1,6 @@
-"use client";  // make sure this is a client component
+"use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { FC } from "react";
 import { Content } from "@prismicio/client";
 import { SliceComponentProps } from "@prismicio/react";
@@ -8,12 +8,16 @@ import { PrismicNextImage } from "@prismicio/next";
 import { FaAnglesRight } from "react-icons/fa6";
 import { CiUser, CiSearch } from "react-icons/ci";
 import { RiMenu3Fill } from "react-icons/ri";
+import { useNewsCategory } from "@/app/components/NewsProvider";
+import { mapCategoryToSection } from "@/lib/nyt";
 
 export type MainNavigationProps =
   SliceComponentProps<Content.MainNavigationSlice>;
 
 const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const { selectedCategory, setSelectedCategory } = useNewsCategory();
 
   const handleSearchClick = () => {
     router.push("/search");
@@ -23,9 +27,28 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
     router.push("/");
   };
 
+  const handleCategoryClick = (label: string) => {
+    const section = mapCategoryToSection(label);
+    setSelectedCategory(section);
+
+    // If user is on search page, navigate back to home page
+    if (pathname !== "/") {
+      router.push("/");
+      return;
+    }
+
+    // Otherwise, scroll to the news section smoothly (on home page)
+    setTimeout(() => {
+      const newsSection = document.querySelector('[data-news-section]');
+      if (newsSection) {
+        newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
   return (
-    <header className="sticky top-0 z-9999 bg-white w-full shadow-sm">
-      <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-white w-full shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
         {/* LEFT — LOGO */}
         <div className="flex items-center shrink-0 cursor-pointer">
           <PrismicNextImage
@@ -36,31 +59,38 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
         </div>
 
         {/* MIDDLE — NAV LINKS */}
-        <nav className="hidden md:flex items-center space-x-16 text-sm font-bold text-gray-700 shrink">
-          {slice.primary.nav_links.map((item, index) => (
-            <button
-              key={index}
-              className="hover:text-black transition cursor-pointer"
-            >
-              {item.label}
-            </button>
-          ))}
-          <span><FaAnglesRight /></span>
+        <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-gray-700 flex-1 justify-center">
+          {slice.primary.nav_links.map((item, index) => {
+            const section = mapCategoryToSection(item.label || "");
+            const isActive = selectedCategory === section;
+
+            return (
+              <button
+                key={index}
+                onClick={() => handleCategoryClick(item.label || "")}
+                className={`hover:text-[#C31815] transition cursor-pointer pb-1 ${isActive ? "text-[#C31815] border-b-2 border-[#C31815]" : ""
+                  }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+          <span className="text-[#C31815]"><FaAnglesRight /></span>
         </nav>
 
         {/* RIGHT — ICONS */}
-        <div className="flex items-center space-x-3 md:space-x-4 text-gray-700 shrink-0">
-          <CiUser size={20} color="#000" className="cursor-pointer" />
-          
+        <div className="flex items-center gap-4 text-gray-700 shrink-0">
+          <CiUser size={22} color="#000" className="cursor-pointer hover:text-[#C31815] transition" />
+
           {/* 🔍 Search icon — navigate to /search on click */}
           <CiSearch
-            size={20}
+            size={22}
             color="#000"
-            className="cursor-pointer"
+            className="cursor-pointer hover:text-[#C31815] transition"
             onClick={handleSearchClick}
           />
 
-          <RiMenu3Fill size={20} color="#000" className="cursor-pointer" />
+          <RiMenu3Fill size={22} color="#000" className="cursor-pointer hover:text-[#C31815] transition" />
         </div>
       </div>
     </header>
