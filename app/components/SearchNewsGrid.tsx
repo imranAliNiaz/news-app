@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import type { NytStory } from "@/lib/nyt";
+import { NytStory } from "@/constants/types";
 
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";

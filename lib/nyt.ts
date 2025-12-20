@@ -1,33 +1,18 @@
 // lib/nyt.ts
 
+import {
+  NytStory,
+  TopStoriesResponse,
+  NytMultimedia,
+  NytSearchDoc,
+} from "@/constants/types";
+
 // Prefer NEXT_PUBLIC_NYT_API_KEY for client usage, fall back to server-only NYT_API_KEY
 const NYT_API_KEY =
   process.env.NEXT_PUBLIC_NYT_API_KEY ?? process.env.NYT_API_KEY;
 
 if (!NYT_API_KEY) {
   throw new Error("NYT_API_KEY is not defined in .env.local");
-}
-
-export interface NytMultimedia {
-  url: string;
-  caption?: string;
-  format?: string;
-  height?: number;
-  width?: number;
-}
-
-export interface NytStory {
-  title: string;
-  abstract: string;
-  url: string;
-  byline: string;
-  published_date: string;
-  section: string;
-  multimedia?: NytMultimedia[];
-}
-
-interface TopStoriesResponse {
-  results: NytStory[];
 }
 
 /**
@@ -112,7 +97,9 @@ export async function searchNews(query: string): Promise<NytStory[]> {
   const json = await res.json();
   const docs = json.response?.docs ?? [];
 
-  const stories: NytStory[] = docs.map((doc: any) => {
+
+
+  const stories: NytStory[] = docs.map((doc: NytSearchDoc) => {
     // ✅ Pick a "best" image if multimedia exists
     let multimedia: NytMultimedia[] = [];
 

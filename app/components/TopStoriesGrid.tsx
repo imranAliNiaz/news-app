@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { type NytStory, filterValidStories } from "@/lib/nyt";
+import { filterValidStories } from "@/lib/nyt";
+import { NytStory } from "@/constants/types";
 import { FiGrid, FiList } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";

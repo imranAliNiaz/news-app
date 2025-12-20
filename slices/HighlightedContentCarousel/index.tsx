@@ -14,12 +14,11 @@ const AUTO_INTERVAL = 5000; // 5 seconds
 const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
   slice,
 }) => {
-  // if your repeatable zone is slice.items, swap this
-  const items = (slice.primary.items as any[]) || [];
+  const items = slice.primary.items || [];
 
   // Build slides: [[item0, item1], [item2, item3], ...]
   const slides = useMemo(() => {
-    const chunks: typeof items[] = [];
+    const chunks: (typeof items[number])[][] = [];
     for (let i = 0; i < items.length; i += ITEMS_PER_SLIDE) {
       chunks.push(items.slice(i, i + ITEMS_PER_SLIDE));
     }

@@ -4,18 +4,7 @@ import { SliceZone } from "@prismicio/react";
 import { components } from "@/slices";
 import SearchNewsGrid from "@/app/components/SearchNewsGrid";
 import { NewsProvider } from "@/app/components/NewsProvider";
-import type { NytStory } from "@/lib/nyt";
-
-interface SearchClientProps {
-    stories: NytStory[];
-    title: string;
-    query: string;
-    slicesData: {
-        header: any;
-        searchBar: any;
-        footer: any;
-    };
-}
+import { SearchClientProps } from "@/constants/types";
 
 export default function SearchClient({ stories, title, query, slicesData }: SearchClientProps) {
     return (

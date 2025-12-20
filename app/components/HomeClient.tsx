@@ -4,19 +4,7 @@ import { SliceZone } from "@prismicio/react";
 import { components } from "@/slices";
 import TopStoriesGrid from "@/app/components/TopStoriesGrid";
 import { NewsProvider } from "@/app/components/NewsProvider";
-import type { NytStory } from "@/lib/nyt";
-
-interface HomeClientProps {
-    initialStories: NytStory[];
-    slicesData: {
-        page1: any;
-        page: any;
-        page2: any;
-        page3: any;
-        page4: any;
-        page5: any;
-    };
-}
+import { HomeClientProps } from "@/constants/types";
 
 export default function HomeClient({ initialStories, slicesData }: HomeClientProps) {
     return (
