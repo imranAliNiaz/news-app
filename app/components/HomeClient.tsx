@@ -21,7 +21,7 @@ interface HomeClientProps {
 export default function HomeClient({ initialStories, slicesData }: HomeClientProps) {
     return (
         <NewsProvider>
-            <div className="min-h-screen overflow-x-hidden bg-[#E7F3FA]">
+            <div className="min-h-screen overflow-x-hidden bg-[#F1F2F3]">
                 <SliceZone slices={slicesData.page1.data.slices} components={components} />
 
                 <SliceZone slices={slicesData.page.data.slices} components={components} />

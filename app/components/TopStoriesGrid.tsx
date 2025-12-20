@@ -18,8 +18,8 @@ export default function TopStoriesGrid({
   initialStories = [],
   title = "Top Stories",
 }: TopStoriesGridProps) {
-  const { selectedCategory } = useNewsCategory();
-  const tabs = ["Latest Stories", "Opinion", "Health"];
+  const { selectedCategory, setSelectedCategory } = useNewsCategory();
+  const tabs = ["Latest Stories", "Politics", "Fashion"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
   const [stories, setStories] = useState<NytStory[]>(initialStories);
@@ -64,37 +64,82 @@ export default function TopStoriesGrid({
   return (
     <>
       <section className="mx-auto max-w-6xl px-4 py-10">
-        {/* (Optional) Main title — uncomment if you want it */}
-        {/* <div className="hidden sm:flex mb-4 items-center justify-between">
-          <h2 className="text-2xl font-semibold text-slate-900">{title}</h2>
-        </div> */}
+
+
+
+
+
 
         {/* Tabs */}
-        <div className="mb-6 flex items-center justify-between border-b border-slate-200 pb-2">
-          <div className="flex items-center gap-4 md:gap-6 text-sm md:text-base">
+        <div
+          className="
+    mb-6
+    flex
+    items-center
+    justify-between
+    h-[54px]
+    max-w-[1368px]
+    border-b
+    border-slate-200
+    bg-white/85
+    backdrop-blur-[28px]
+    px-4
+  "
+        >
+          {/* Left Tabs */}
+          <div className="flex items-center gap-6">
             {tabs.map((tab) => (
               <button
                 key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`pb-1 transition ${activeTab === tab
-                  ? "border-b-2 border-red-500 font-semibold text-slate-900 cursor-pointer"
-                  : "text-slate-600 hover:text-slate-900 cursor-pointer"
-                  }`}
+                onClick={() => {
+                  setActiveTab(tab);
+                  if (tab === "Latest Stories") setSelectedCategory("world");
+                  else if (tab === "Politics") setSelectedCategory("politics");
+                  else if (tab === "Fashion") setSelectedCategory("fashion");
+                }}
+                className={`
+          font-[var(--font-poppins)]
+          text-[18px]
+          leading-[1]
+          tracking-normal
+          pb-[6px]
+          transition
+          cursor-pointer
+          ${activeTab === tab
+                    ? "border-b-2 border-red-500 font-semibold text-slate-900"
+                    : "font-medium text-slate-600 hover:text-slate-900"
+                  }
+        `}
               >
                 {tab}
               </button>
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-3 text-slate-500">
-            <button className="p-1 hover:text-slate-900 transition">
-              <FiGrid size={16} />
-            </button>
-            <button className="p-1 hover:text-slate-900 transition">
-              <FiList size={16} />
+          {/* Right Icon (Figma Export) */}
+          <div className="hidden md:flex items-center">
+            <button
+              className="
+        p-1
+        hover:opacity-80
+        transition
+        flex
+        items-center
+        justify-center
+        cursor-pointer
+      "
+            >
+              <Image
+                src="/icons/tab-icon.png"   // 🔁 change if your filename differs
+                alt="View options"
+                width={27.43}           // exact Figma width
+                height={24}             // exact Figma height
+              />
             </button>
           </div>
         </div>
+
+
 
         {/* Loading State */}
         {loading && (
@@ -132,12 +177,12 @@ export default function TopStoriesGrid({
 
         {/* VIEW MORE */}
         {stories.length > visibleCount && (
-          <div className="mt-5 flex justify-center">
+          <div className="mt-8 flex justify-center">
             <button
               onClick={() => setVisibleCount((prev) => prev + 6)}
-              className="rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition hover:bg-[#C31815] hover:text-white cursor-pointer"
+              className="rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition   cursor-pointer"
               style={{
-                backgroundColor: "#ffffff",
+
                 color: "#C31815",
                 border: "1px solid #C31815",
               }}
