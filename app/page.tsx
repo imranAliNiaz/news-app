@@ -1,4 +1,3 @@
-// app/page.tsx
 import { getTopStories, filterValidStories } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
 import HomeClient from "@/app/components/HomeClient";

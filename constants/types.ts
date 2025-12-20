@@ -8,10 +8,6 @@ import {
     TopnewsDocument
 } from "@/prismicio-types";
 
-// =========================================
-// 📰 NYT API Types
-// =========================================
-
 export interface NytMultimedia {
     url: string;
     caption?: string;
@@ -34,9 +30,6 @@ export interface TopStoriesResponse {
     results: NytStory[];
 }
 
-/**
- * Raw Document interface from NYT Search API
- */
 export interface NytSearchDoc {
     web_url: string;
     headline: {
@@ -65,19 +58,16 @@ export interface NytSearchResponse {
     };
 }
 
-// =========================================
-// ⚛️ Component Props
-// =========================================
 
 export interface HomeClientProps {
     initialStories: NytStory[];
     slicesData: {
-        page1: MainnavigationDocument; // Header
-        page: HamzaDocument;           // Landing Page
-        page2: NavbarDocument;         // Announcement Bar
-        page3: NewscontentcardDocument;// Featured Content
-        page4: TopnewsDocument;        // Top News / Carousel
-        page5: SimplefooterDocument;   // Footer
+        page1: MainnavigationDocument;
+        page: HamzaDocument;
+        page2: NavbarDocument;
+        page3: NewscontentcardDocument;
+        page4: TopnewsDocument;
+        page5: SimplefooterDocument;
     };
 }
 

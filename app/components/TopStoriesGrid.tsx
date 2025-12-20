@@ -29,12 +29,11 @@ export default function TopStoriesGrid({
 
   const [visibleCount, setVisibleCount] = useState(6);
 
-  // Fetch stories when category changes
+
   useEffect(() => {
     const fetchStories = async () => {
       setLoading(true);
       setError(null);
-      // Reset visible count when category changes
       setVisibleCount(6);
 
       try {
@@ -48,7 +47,7 @@ export default function TopStoriesGrid({
 
         const data = await response.json();
         const validStories = filterValidStories(data.results);
-        setStories(validStories); // Show all valid stories dynamically
+        setStories(validStories);
       } catch (err) {
         console.error("Error fetching stories:", err);
         setError("Failed to load news. Please try again.");
@@ -73,7 +72,7 @@ export default function TopStoriesGrid({
 
         {/* Tabs */}
         <div className="mb-2 flex h-[54px] max-w-[1368px] items-center justify-between border-b border-slate-200 bg-white/85 px-4 backdrop-blur-[28px]">
-          {/* Left Tabs */}
+
           <div className="flex items-center gap-6">
             {tabs.map((tab) => (
               <button
@@ -94,7 +93,7 @@ export default function TopStoriesGrid({
             ))}
           </div>
 
-          {/* Right Icon */}
+
           <div className="hidden md:flex items-center">
             <button className="flex cursor-pointer items-center justify-center p-1 transition hover:opacity-80">
               <Image
@@ -110,21 +109,21 @@ export default function TopStoriesGrid({
 
 
 
-        {/* Loading State */}
+
         {loading && (
           <div className="flex justify-center items-center py-20">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C31815]"></div>
           </div>
         )}
 
-        {/* Error State */}
+
         {error && !loading && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
             {error}
           </div>
         )}
 
-        {/* Cards grid */}
+
         {!loading && !error && (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {stories.slice(0, visibleCount).map((story) => (
@@ -137,14 +136,14 @@ export default function TopStoriesGrid({
           </div>
         )}
 
-        {/* Empty State */}
+
         {!loading && !error && stories.length === 0 && (
           <div className="text-center py-20 text-slate-500">
             <p className="text-lg">No stories available for this category.</p>
           </div>
         )}
 
-        {/* VIEW MORE */}
+
         {stories.length > visibleCount && (
           <div className="mt-8 flex justify-center">
             <button
@@ -162,7 +161,7 @@ export default function TopStoriesGrid({
         )}
       </section>
 
-      {/* Modal */}
+
       {selectedStory && (
         <NewsModal story={selectedStory} onClose={() => setSelectedStory(null)} />
       )}
@@ -202,9 +201,7 @@ function NewsCard({ story, onClick }: NewsCardProps) {
             fill
             className="object-cover"
           />
-          {/* <span className="absolute bottom-3 right-3 rounded-xs bg-[#C31815] px-3 py-1 text-[10px] font-semibold tracking-wide text-white">
-            {sectionLabel}
-          </span> */}
+
         </div>
       )}
 
