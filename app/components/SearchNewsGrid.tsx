@@ -22,7 +22,7 @@ export default function SearchNewsGrid({
   }, [stories]);
 
   return (
-    <section className="mx-auto max-w-6xl px-4 py-10">
+    <section className="mx-auto max-w-7xl px-4 py-10">
       {/* Main title */}
       <div className="h-14 mb-4 flex items-center justify-between bg-white">
         <h2 className="text-xl ml-2 md:text-2xl font-semibold text-slate-900">{title}</h2>

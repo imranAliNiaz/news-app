@@ -63,7 +63,7 @@ export default function TopStoriesGrid({
 
   return (
     <>
-      <section className="mx-auto max-w-6xl px-4 py-10">
+      <section className="mx-auto max-w-7xl px-4 py-10">
 
 
 
@@ -71,21 +71,7 @@ export default function TopStoriesGrid({
 
 
         {/* Tabs */}
-        <div
-          className="
-    mb-6
-    flex
-    items-center
-    justify-between
-    h-[54px]
-    max-w-[1368px]
-    border-b
-    border-slate-200
-    bg-white/85
-    backdrop-blur-[28px]
-    px-4
-  "
-        >
+        <div className="mb-2 flex h-[54px] max-w-[1368px] items-center justify-between border-b border-slate-200 bg-white/85 px-4 backdrop-blur-[28px]">
           {/* Left Tabs */}
           <div className="flex items-center gap-6">
             {tabs.map((tab) => (
@@ -97,47 +83,29 @@ export default function TopStoriesGrid({
                   else if (tab === "Politics") setSelectedCategory("politics");
                   else if (tab === "Fashion") setSelectedCategory("fashion");
                 }}
-                className={`
-          font-[var(--font-poppins)]
-          text-[18px]
-          leading-[1]
-          tracking-normal
-          pb-[6px]
-          transition
-          cursor-pointer
-          ${activeTab === tab
-                    ? "border-b-2 border-red-500 font-semibold text-slate-900"
-                    : "font-medium text-slate-600 hover:text-slate-900"
-                  }
-        `}
+                className={`cursor-pointer pb-[6px] text-[18px] leading-[1] tracking-normal transition font-[var(--font-poppins)] ${activeTab === tab
+                  ? "border-b-2 border-red-500 font-semibold text-slate-900"
+                  : "font-medium text-slate-600 hover:text-slate-900"
+                  }`}
               >
                 {tab}
               </button>
             ))}
           </div>
 
-          {/* Right Icon (Figma Export) */}
+          {/* Right Icon */}
           <div className="hidden md:flex items-center">
-            <button
-              className="
-        p-1
-        hover:opacity-80
-        transition
-        flex
-        items-center
-        justify-center
-        cursor-pointer
-      "
-            >
+            <button className="flex cursor-pointer items-center justify-center p-1 transition hover:opacity-80">
               <Image
-                src="/icons/tab-icon.png"   // 🔁 change if your filename differs
+                src="/icons/tab-icon.png"
                 alt="View options"
-                width={27.43}           // exact Figma width
-                height={24}             // exact Figma height
+                width={27.43}
+                height={24}
               />
             </button>
           </div>
         </div>
+
 
 
 
