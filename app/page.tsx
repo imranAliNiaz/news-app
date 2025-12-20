@@ -1,5 +1,5 @@
 // app/page.tsx
-import { getTopStories } from "@/lib/nyt";
+import { getTopStories, filterValidStories } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
 import HomeClient from "@/app/components/HomeClient";
 
@@ -16,7 +16,7 @@ export default async function Home() {
     client.getSingle("simplefooter"),
   ]);
 
-  const stories = topStoriesData.results.slice(0, 6); // show first 6 cards
+  const stories = filterValidStories(topStoriesData.results); // filter valid stories dynamically
 
   return (
     <HomeClient

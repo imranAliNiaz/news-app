@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import type { NytStory } from "@/lib/nyt";
+import { type NytStory, filterValidStories } from "@/lib/nyt";
 import { FiGrid, FiList } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
@@ -26,11 +26,15 @@ export default function TopStoriesGrid({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [visibleCount, setVisibleCount] = useState(6);
+
   // Fetch stories when category changes
   useEffect(() => {
     const fetchStories = async () => {
       setLoading(true);
       setError(null);
+      // Reset visible count when category changes
+      setVisibleCount(6);
 
       try {
         const response = await fetch(
@@ -42,7 +46,8 @@ export default function TopStoriesGrid({
         }
 
         const data = await response.json();
-        setStories(data.results.slice(0, 6)); // Show first 6 cards
+        const validStories = filterValidStories(data.results);
+        setStories(validStories); // Show all valid stories dynamically
       } catch (err) {
         console.error("Error fetching stories:", err);
         setError("Failed to load news. Please try again.");
@@ -108,7 +113,7 @@ export default function TopStoriesGrid({
         {/* Cards grid */}
         {!loading && !error && (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {stories.map((story) => (
+            {stories.slice(0, visibleCount).map((story) => (
               <NewsCard
                 key={story.url}
                 story={story}
@@ -126,18 +131,21 @@ export default function TopStoriesGrid({
         )}
 
         {/* VIEW MORE */}
-        <div className="mt-5 flex justify-center">
-          <button
-            className="rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition hover:bg-[#C31815] hover:text-white cursor-pointer"
-            style={{
-              backgroundColor: "#ffffff",
-              color: "#C31815",
-              border: "1px solid #C31815",
-            }}
-          >
-            VIEW MORE
-          </button>
-        </div>
+        {stories.length > visibleCount && (
+          <div className="mt-5 flex justify-center">
+            <button
+              onClick={() => setVisibleCount((prev) => prev + 6)}
+              className="rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition hover:bg-[#C31815] hover:text-white cursor-pointer"
+              style={{
+                backgroundColor: "#ffffff",
+                color: "#C31815",
+                border: "1px solid #C31815",
+              }}
+            >
+              VIEW MORE
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Modal */}

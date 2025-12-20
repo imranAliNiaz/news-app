@@ -1,6 +1,4 @@
-"use client";
-
-
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import type { NytStory } from "@/lib/nyt";
 
@@ -17,7 +15,11 @@ export default function SearchNewsGrid({
   stories,
   title = "Search Results",
 }: SearchNewsGridProps) {
-  
+  const [visibleCount, setVisibleCount] = useState(6);
+
+  useEffect(() => {
+    setVisibleCount(6);
+  }, [stories]);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10">
@@ -26,43 +28,44 @@ export default function SearchNewsGrid({
         <h2 className="text-xl ml-2 md:text-2xl font-semibold text-slate-900">{title}</h2>
       </div>
 
-     
-
       {/* Cards grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {stories.map((story) => (
+        {stories.slice(0, visibleCount).map((story) => (
           <SearchNewsCard key={story.url} story={story} />
         ))}
       </div>
 
       {/* VIEW MORE BUTTON */}
-      <div className="mt-5 flex justify-center">
-        <button
-          className="cursor-pointer rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition hover:bg-[#C31815] hover:text-white"
-          style={{
-            backgroundColor: "#ffffff",
-            color: "#C31815",
-            border: "1px solid #C31815",
-          }}
-        >
-          VIEW MORE
-        </button>
-      </div>
+      {stories.length > visibleCount && (
+        <div className="mt-5 flex justify-center">
+          <button
+            onClick={() => setVisibleCount((prev) => prev + 6)}
+            className="cursor-pointer rounded-md px-16 md:px-10 py-3 text-sm font-semibold transition hover:bg-[#C31815] hover:text-white"
+            style={{
+              backgroundColor: "#ffffff",
+              color: "#C31815",
+              border: "1px solid #C31815",
+            }}
+          >
+            VIEW MORE
+          </button>
+        </div>
+      )}
     </section>
   );
 }
 
 function SearchNewsCard({ story }: { story: NytStory }) {
   const img = story.multimedia?.[0];
-  
+
 
   const published = new Date(story.published_date);
   const publishedLabel = isNaN(published.getTime())
     ? ""
     : published.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-      });
+      month: "short",
+      day: "numeric",
+    });
 
   const author =
     story.byline?.replace(/^By\s+/i, "") || "New York Times";

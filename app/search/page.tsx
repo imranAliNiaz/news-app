@@ -1,5 +1,5 @@
 // app/search/page.tsx
-import { getTopStories, searchNews } from "@/lib/nyt";
+import { getTopStories, searchNews, filterValidStories } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
 import SearchClient from "@/app/components/SearchClient";
 
@@ -27,12 +27,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   if (query) {
     // Use NYT Article Search API
-    stories = await searchNews(query);
+    const rawStories = await searchNews(query);
+    stories = filterValidStories(rawStories);
     title = `Search results for "${query}"`;
   } else {
     // Default to top stories (world) when no query
     const topStoriesData = await getTopStories("world");
-    stories = topStoriesData.results.slice(0, 6);
+    stories = filterValidStories(topStoriesData.results);
     title = "Top Stories";
   }
 

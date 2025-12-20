@@ -204,3 +204,17 @@ export function mapCategoryToSection(label: string): string {
   return "world";
 }
 
+
+/**
+ * 🧹 Filter out stories that are missing critical content
+ * Returns only stories that have title, abstract, and at least one image
+ */
+export function filterValidStories(stories: NytStory[]): NytStory[] {
+  return stories.filter((story) => {
+    const hasTitle = story.title && story.title.trim().length > 0;
+    const hasAbstract = story.abstract && story.abstract.trim().length > 0;
+    const hasImage = story.multimedia && story.multimedia.length > 0 && story.multimedia[0].url;
+
+    return hasTitle && hasAbstract && hasImage;
+  });
+}
