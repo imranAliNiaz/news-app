@@ -13,74 +13,68 @@ export type FeatureArticleProps = SliceComponentProps<
 const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
   return (
     <section
-      className="w-full
-    block lg:grid lg:grid-cols-2
-    lg:gap-10
-    py-4 sm:py-6 lg:py-10
-    px-4 sm:px-6 lg:px-16"
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
+      className="w-full"
     >
-      {/* LEFT — Image Composition */}
-      <div className="relative w-full flex justify-center items-center">
-        {/* Background Lines / Decorations (optional) */}
-        <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-          {/* Decorative SVG or shapes */}
-        </div>
+      {/* ✅ MAX-WIDTH CONTAINER (LIKE ANNOUNCEMENT BAR) */}
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
+        {/* FLEX WRAPPER */}
+        <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16 pt-4 sm:pt-6 lg:pt-10 pb-0 lg:pb-10">
 
-        {/* Main image box */}
-        <div className="relative z-10 w-full h-[350px] md:h-[500px] overflow-hidden bg-white shadow-xl">
-          <PrismicNextImage
-            field={slice.primary.main_image}
-            className="w-full h-full object-cover"
-            fallbackAlt="" 
-          />
+          {/* LEFT — IMAGE */}
+          <div className="relative w-full lg:flex-[3]">
+            <div className="relative aspect-[16/9] overflow-hidden shadow-xl">
+              <PrismicNextImage
+                field={slice.primary.main_image}
+                className="h-full w-full object-cover"
+                fallbackAlt=""
+              />
 
-          {/* 🌟 Overlay title for small screens */}
-          <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-6 lg:hidden">
-  <div className="text-white text-2xl sm:text-3xl font-bold leading-tight">
-    <PrismicRichText field={slice.primary.title} />
-  </div>
-</div><div className="absolute inset-0 flex items-end bg-linear-to-t from-black/60 to-transparent p-6 lg:hidden">
-  <div className="text-white text-2xl sm:text-3xl font-bold leading-tight">
-    <PrismicRichText field={slice.primary.title} />
-  </div>
-</div>
-        </div>
-      </div>
-
-      {/* RIGHT — Text Content (for md / lg screens) */}
-      <div className="flex flex-col justify-center max-w-xl mx-auto lg:mx-0">
-        {/* Show tag & icons on md+ only */}
-        <div className="hidden md:flex items-center justify-between mb-3">
-          <p className="text-red-500 text-sm font-semibold tracking-wide">
-            {slice.primary.tag}
-          </p>
-          <div className="flex items-center gap-4 text-gray-600 text-xl cursor-pointer">
-            <CiHeart />
-            <RiMobileDownloadLine />
-            <VscComment />
+              {/* OVERLAY TITLE — MOBILE + TABLET */}
+              <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 to-transparent p-5 lg:hidden">
+                <div className="max-w-[90%] text-xl sm:text-2xl font-bold leading-tight text-white">
+                  <PrismicRichText field={slice.primary.title} />
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
 
-        {/* Title — hidden on small (since overlay renders it) */}
-        <div className="hidden lg:block text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4">
-          <PrismicRichText field={slice.primary.title} />
-        </div>
+          {/* RIGHT — TEXT (DESKTOP ONLY) */}
+          <div className="hidden lg:flex lg:flex-[2] flex-col justify-center">
+            {/* TAG + ICONS */}
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm font-semibold tracking-wide text-red-500">
+                {slice.primary.tag}
+              </p>
+              <div className="flex items-center gap-4 text-xl text-gray-600 cursor-pointer">
+                <CiHeart />
+                <RiMobileDownloadLine />
+                <VscComment />
+              </div>
+            </div>
 
-        {/* Summary */}
-        <div className="hidden text-gray-600 text-base leading-relaxed mb-6 lg:mb-0">
-          <PrismicRichText field={slice.primary.summary} />
-        </div>
+            {/* TITLE */}
+            <div className="mb-4 text-3xl xl:text-4xl font-bold leading-tight text-gray-900">
+              <PrismicRichText field={slice.primary.title} />
+            </div>
 
-        {/* Meta Info — show on md+ */}
-        <div className="hidden md:flex items-center gap-4 text-sm text-gray-500">
-          {slice.primary.post_time && <span>{slice.primary.post_time}</span>}
-          {slice.primary.author_name && <span>{slice.primary.author_name}</span>}
-          {slice.primary.author_name && slice.primary.read_time && (
-            <span className="w-px h-4 bg-gray-400"></span>
-          )}
-          {slice.primary.read_time && <span>{slice.primary.read_time}</span>}
+            {/* SUMMARY */}
+            <div className="mb-6 max-w-[640px] text-base leading-relaxed text-gray-600">
+              <PrismicRichText field={slice.primary.summary} />
+            </div>
+
+            {/* META */}
+            <div className="flex items-center gap-4 text-sm text-gray-500">
+              {slice.primary.post_time && <span>{slice.primary.post_time}</span>}
+              {slice.primary.author_name && <span>{slice.primary.author_name}</span>}
+              {slice.primary.author_name && slice.primary.read_time && (
+                <span className="h-4 w-px bg-gray-400" />
+              )}
+              {slice.primary.read_time && <span>{slice.primary.read_time}</span>}
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

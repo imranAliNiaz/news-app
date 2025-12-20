@@ -20,7 +20,7 @@ const AnnouncementBar: FC<AnnouncementBarProps> = ({ slice }) => {
             flex flex-col sm:flex-row items-center sm:justify-center gap-4
             h-auto md:h-20
             py-4 sm:py-0
-            rounded-md
+            lg:rounded-md
           "
         >
           {/* Button / label */}
