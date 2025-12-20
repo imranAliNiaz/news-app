@@ -66,7 +66,13 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
           <input
             type="text"
             value={value}
-            onChange={(e) => setValue(e.target.value)}
+            onChange={(e) => {
+              const val = e.target.value;
+              setValue(val);
+              if (val.trim() === "") {
+                router.push("/search");
+              }
+            }}
             placeholder={slice.primary.input_placeholder || "Search news"}
             className="w-full rounded-sm border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-800 shadow-sm outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400"
           />
