@@ -84,9 +84,6 @@ function SearchNewsCard({ story }: { story: NytStory }) {
             fill
             className="object-cover"
           />
-          <span className="absolute bottom-3 right-3 rounded-xs bg-[#C31815] px-3 py-1 text-[10px] font-semibold tracking-wide text-white">
-            {sectionLabel}
-          </span>
         </div>
       )}
 

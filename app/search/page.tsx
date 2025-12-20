@@ -34,7 +34,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     // Default to top stories (world) when no query
     const topStoriesData = await getTopStories("world");
     stories = filterValidStories(topStoriesData.results);
-    title = "World News";
+    title = "Latest News";
   }
 
   return (
