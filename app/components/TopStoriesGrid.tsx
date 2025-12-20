@@ -63,7 +63,7 @@ export default function TopStoriesGrid({
 
   return (
     <>
-      <section className="mx-auto max-w-7xl px-4 py-10">
+      <section className="mx-auto max-w-7xl px-4 py-0 lg:py-10">
 
 
 

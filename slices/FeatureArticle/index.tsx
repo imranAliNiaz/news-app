@@ -18,7 +18,7 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
       className="w-full"
     >
       {/* ✅ MAX-WIDTH CONTAINER (LIKE ANNOUNCEMENT BAR) */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-12">
+      <div className="mx-auto max-w-7xl px-4 ">
         {/* FLEX WRAPPER */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16 pt-4 sm:pt-6 lg:pt-10 pb-0 lg:pb-10">
 
