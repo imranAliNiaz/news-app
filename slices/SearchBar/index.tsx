@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Content } from "@prismicio/client";
 import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
@@ -14,6 +14,11 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
 
   // Pre-fill from current URL (?query=...)
   const [value, setValue] = useState(searchParams.get("query") ?? "");
+
+  // Sync state with URL params
+  useEffect(() => {
+    setValue(searchParams.get("query") ?? "");
+  }, [searchParams]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

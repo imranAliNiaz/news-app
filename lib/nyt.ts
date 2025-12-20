@@ -218,3 +218,15 @@ export function filterValidStories(stories: NytStory[]): NytStory[] {
     return hasTitle && hasAbstract && hasImage;
   });
 }
+
+/**
+ * 🔍 Filter for Search Results (Lenient)
+ * Allows stories without images, but requires title and URL.
+ */
+export function filterSearchStories(stories: NytStory[]): NytStory[] {
+  return stories.filter((story) => {
+    const hasTitle = story.title && story.title.trim().length > 0;
+    const hasUrl = story.url && story.url.trim().length > 0;
+    return hasTitle && hasUrl;
+  });
+}
