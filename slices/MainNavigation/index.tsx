@@ -31,7 +31,12 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
     const section = mapCategoryToSection(label);
     setSelectedCategory(section);
 
-    // If user is on search page, navigate back to home page
+    // If on Search page, do NOT navigate. The Search page will detect change and refetch.
+    if (pathname && pathname.startsWith("/search")) {
+      return;
+    }
+
+    // If user is on other pages (not home, not search), navigate back to home page
     if (pathname !== "/") {
       router.push("/");
       return;

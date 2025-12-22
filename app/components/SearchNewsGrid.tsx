@@ -6,16 +6,84 @@ import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
 
+import { filterValidStories } from "@/lib/nyt";
+import { useNewsCategory } from "./NewsProvider";
+import NewsModal from "./NewsModal";
+
 interface SearchNewsGridProps {
   stories: NytStory[];
   title?: string;
 }
 
 export default function SearchNewsGrid({
-  stories,
+  stories: initialStories,
   title = "Search Results",
 }: SearchNewsGridProps) {
+  const { selectedCategory } = useNewsCategory();
+  // We'll use local state for stories so we can update them when category changes
+  const [stories, setStories] = useState<NytStory[]>(initialStories);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Track if we are in "search mode" (initial props) or "category mode" (updates)
+  // Actually, we can just detect if selectedCategory changes.
+  // But wait, initially selectedCategory might be "world" (default).
+  // If we are on search page with query, we want to show query results first.
+  // Only when user CLICKS a category (changing context) should we update.
+  // But context is shared. If user searches, they are on /search. selectedCategory is whatever it was.
+  // To detect "User clicked category", we rely on the fact that MainNavigation updates selectedCategory.
+  // We need a ref to track if it's the first render (search results) or subsequent (category switch).
+
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  useEffect(() => {
+    // On mount, we just show initialStories.
+    // If selectedCategory changes AFTER mount, we fetch new stories.
+    if (isFirstRender) {
+      setIsFirstRender(false);
+      return;
+    }
+
+    const fetchStories = async () => {
+      setLoading(true);
+      setError(null);
+      setVisibleCount(6);
+
+      try {
+        const response = await fetch(
+          `/api/top-stories?section=${encodeURIComponent(selectedCategory)}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch stories");
+        }
+
+        const data = await response.json();
+        const validStories = filterValidStories(data.results);
+        setStories(validStories);
+      } catch (err) {
+        console.error("Error fetching stories:", err);
+        setError("Failed to load news. Please try again.");
+        setStories([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStories();
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    // If initialStories changes (e.g. new search), update stories
+    // But we need to be careful not to overwrite category selection if that was the intent.
+    // However, if the parent passes new props (new search query), we should probably respect it.
+    if (initialStories) {
+      setStories(initialStories);
+      setIsFirstRender(true); // Reset so we don't immediately refetch based on category
+    }
+  }, [initialStories]);
 
   useEffect(() => {
     setVisibleCount(6);
@@ -29,14 +97,32 @@ export default function SearchNewsGrid({
       </div>
 
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {stories.slice(0, visibleCount).map((story) => (
-          <SearchNewsCard key={story.url} story={story} />
-        ))}
-      </div>
+      {loading && (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C31815]"></div>
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
+          {error}
+        </div>
+      )}
+
+      {!loading && !error && (
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {stories.slice(0, visibleCount).map((story) => (
+            <SearchNewsCard
+              key={story.url}
+              story={story}
+              onClick={() => setSelectedStory(story)}
+            />
+          ))}
+        </div>
+      )}
 
 
-      {stories.length > visibleCount && (
+      {!loading && !error && stories.length > visibleCount && (
         <div className="mt-5 flex justify-center">
           <button
             onClick={() => setVisibleCount((prev) => prev + 6)}
@@ -51,11 +137,15 @@ export default function SearchNewsGrid({
           </button>
         </div>
       )}
+
+      {selectedStory && (
+        <NewsModal story={selectedStory} onClose={() => setSelectedStory(null)} />
+      )}
     </section>
   );
 }
 
-function SearchNewsCard({ story }: { story: NytStory }) {
+function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => void }) {
   const img = story.multimedia?.[0];
 
 
@@ -74,7 +164,10 @@ function SearchNewsCard({ story }: { story: NytStory }) {
     : "NEWS";
 
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_10px_35px_rgba(0,0,0,0.08)] transition hover:-translate-y-1">
+    <article
+      className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_10px_35px_rgba(0,0,0,0.08)] transition hover:-translate-y-1 cursor-pointer"
+      onClick={onClick}
+    >
 
       {img && img.url && (
         <div className="relative h-56 w-full">
