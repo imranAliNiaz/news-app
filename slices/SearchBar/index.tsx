@@ -23,17 +23,14 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const q = value.trim();
-    // For your “filter only” requirement, empty query just shows default list
-    router.push(
-      q ? `/search?query=${encodeURIComponent(q)}` : "/search"
-    );
+    router.push(q ? `/search?query=${encodeURIComponent(q)}` : "/search");
   };
 
   return (
     <section
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
-      className="bg-[#F4F6F8] py-16"
+      className="bg-[#F4F6F8] py-32"
     >
       <div className="mx-auto max-w-3xl px-4 text-center">
         {/* Title */}
@@ -41,22 +38,23 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
           field={slice.primary.title}
           components={{
             heading1: ({ children }) => (
-              <h2 className="mb-8 text-3xl font-semibold text-slate-900 md:text-4xl">
+              <h2 className="mb-14 font-heading text-[48px] font-semibold leading-none tracking-normal text-[#2A2A2A] text-center">
                 {children}
               </h2>
             ),
             heading2: ({ children }) => (
-              <h2 className="mb-8 text-3xl font-semibold text-slate-900 md:text-4xl">
+              <h2 className="mb-14 font-heading text-[48px] font-semibold leading-none tracking-normal text-[#2A2A2A] text-center">
                 {children}
               </h2>
             ),
             paragraph: ({ children }) => (
-              <h2 className="mb-8 text-3xl font-semibold text-slate-900 md:text-4xl">
+              <h2 className="mb-14 font-heading text-[48px] font-semibold leading-none tracking-normal text-[#2A2A2A] text-center">
                 {children}
               </h2>
             ),
           }}
         />
+
 
         {/* Search input */}
         <form onSubmit={handleSubmit} className="relative mx-auto mt-2 w-full">

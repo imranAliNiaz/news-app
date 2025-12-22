@@ -13,7 +13,7 @@ interface ArticleModalContentProps {
 
 export default function ArticleModalContent({
     story,
-    onClose
+    onClose,
 }: ArticleModalContentProps) {
     const img = story.multimedia?.[0];
 
@@ -51,19 +51,23 @@ export default function ArticleModalContent({
             </div>
 
             <div className="flex w-full flex-col gap-4 px-6 py-6 md:w-1/2 md:py-8">
-                <span className="text-xs font-semibold uppercase tracking-wide text-[#C31815]">
+                {/* 🔴 TRENDING */}
+                <span className="font-body text-[14px] font-semibold leading-[2.1] tracking-[0.02em] text-[#C31815]">
                     Trending
                 </span>
 
-                <h2 className="text-xl font-semibold leading-snug text-slate-900 md:text-2xl">
+                {/* 🟥 TITLE */}
+                <h2 className="font-heading text-[18px] md:text-[24px] font-semibold leading-[27px] text-slate-900">
                     {story.title}
                 </h2>
 
-                <p className="text-sm leading-relaxed text-slate-600">
+                {/* 🟩 DESCRIPTION */}
+                <p className="font-description text-[15px] font-normal leading-[22px] text-slate-600">
                     {story.abstract}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+                {/* ⚫ META ROW */}
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
                     {publishedLabel && (
                         <>
                             <span>{publishedLabel}</span>
@@ -89,12 +93,13 @@ export default function ArticleModalContent({
                     </button>
                 </div>
 
+                {/* 🔴 READ FULL ARTICLE */}
                 <div className="mt-4">
                     <a
                         href={story.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs font-semibold text-[#C31815] hover:underline"
+                        className="font-body text-[14px] font-semibold leading-[2.1] tracking-[0.02em] text-[#C31815] hover:underline"
                     >
                         Read full article →
                     </a>

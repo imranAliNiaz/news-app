@@ -29,7 +29,7 @@ const AnnouncementBar: FC<AnnouncementBarProps> = ({ slice }) => {
           </div>
 
           {/* Message */}
-          <div className="text-white text-sm text-center sm:text-left">
+          <div className="font-body text-[20px] font-medium leading-[15px] tracking-[0] text-white text-center sm:text-left">
             <PrismicRichText field={slice.primary.message} />
           </div>
         </div>

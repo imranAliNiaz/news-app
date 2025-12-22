@@ -31,22 +31,19 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
     const section = mapCategoryToSection(label);
     setSelectedCategory(section);
 
-    // If on Search page, do NOT navigate. The Search page will detect change and refetch.
     if (pathname && pathname.startsWith("/search")) {
       return;
     }
 
-    // If user is on other pages (not home, not search), navigate back to home page
     if (pathname !== "/") {
       router.push("/");
       return;
     }
 
-    // Otherwise, scroll to the news section smoothly (on home page)
     setTimeout(() => {
       const newsSection = document.querySelector('[data-news-section]');
       if (newsSection) {
-        newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        newsSection.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 100);
   };
@@ -64,7 +61,7 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
         </div>
 
         {/* MIDDLE — NAV LINKS */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-bold text-gray-700 flex-1 justify-center">
+        <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
           {slice.primary.nav_links.map((item, index) => {
             const section = mapCategoryToSection(item.label || "");
             const isActive = selectedCategory === section;
@@ -73,21 +70,40 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
               <button
                 key={index}
                 onClick={() => handleCategoryClick(item.label || "")}
-                className={`hover:text-[#C31815] transition cursor-pointer pb-1 ${isActive ? "text-[#C31815] border-b-2 border-[#C31815]" : ""
-                  }`}
+                className={`
+                  font-description
+                  text-[16px]
+                  font-semibold
+                  leading-none
+                  tracking-normal
+                  text-[#2A2A2A]
+                  hover:text-[#C31815]
+                  transition
+                  cursor-pointer
+                  pb-1
+                  ${isActive
+                    ? "text-[#C31815] border-b-2 border-[#C31815]"
+                    : ""
+                  }
+                `}
               >
                 {item.label}
               </button>
             );
           })}
-          <span className="text-[#C31815]"><FaAnglesRight /></span>
+          <span className="text-[#C31815]">
+            <FaAnglesRight />
+          </span>
         </nav>
 
         {/* RIGHT — ICONS */}
         <div className="flex items-center gap-4 text-gray-700 shrink-0">
-          <CiUser size={22} color="#000" className="cursor-pointer hover:text-[#C31815] transition" />
+          <CiUser
+            size={22}
+            color="#000"
+            className="cursor-pointer hover:text-[#C31815] transition"
+          />
 
-          {/* 🔍 Search icon — navigate to /search on click */}
           <CiSearch
             size={22}
             color="#000"
@@ -95,7 +111,11 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
             onClick={handleSearchClick}
           />
 
-          <RiMenu3Fill size={22} color="#000" className="cursor-pointer hover:text-[#C31815] transition" />
+          <RiMenu3Fill
+            size={22}
+            color="#000"
+            className="cursor-pointer hover:text-[#C31815] transition"
+          />
         </div>
       </div>
     </header>

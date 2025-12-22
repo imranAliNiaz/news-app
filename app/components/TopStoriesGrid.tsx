@@ -84,7 +84,7 @@ export default function TopStoriesGrid({
                   else if (tab === "Politics") setSelectedCategory("politics");
                   else if (tab === "Fashion") setSelectedCategory("fashion");
                 }}
-                className={`cursor-pointer pb-[6px] text-[18px] leading-[1] tracking-normal transition font-[var(--font-poppins)] ${activeTab === tab
+                className={`cursor-pointer pb-[6px] text-[18px] leading-[1] tracking-normal transition font-body text-[#2A2A2A] ${activeTab === tab
                   ? "border-b-2 border-red-500 font-semibold text-slate-900"
                   : "font-medium text-slate-600 hover:text-slate-900"
                   }`}
@@ -185,7 +185,6 @@ function NewsCard({ story, onClick }: NewsCardProps) {
   });
 
   const author = story.byline?.replace(/^By\s+/i, "") || "New York Times";
-  const sectionLabel = story.section ? story.section.toUpperCase() : "NEWS";
 
   return (
     <article
@@ -202,19 +201,22 @@ function NewsCard({ story, onClick }: NewsCardProps) {
             fill
             className="object-cover"
           />
-
         </div>
       )}
 
       <div className="flex flex-1 flex-col px-6 py-5">
-        <h3 className="mb-3 text-lg font-semibold leading-snug text-slate-900">
+        {/* 🔴 HEADING */}
+        <h3 className="mb-3 font-heading text-[18px] font-semibold leading-[27px] text-slate-900">
           {story.title}
         </h3>
-        <p className="mb-5 text-sm leading-relaxed text-slate-600">
+
+        {/* 🟩 DESCRIPTION */}
+        <p className="mb-5 font-description text-[15px] font-normal leading-[22px] text-slate-600">
           {story.abstract}
         </p>
 
-        <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+        {/* ⚫ META ROW */}
+        <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
           <span className="font-medium text-slate-600">{publishedLabel}</span>
           <span className="text-slate-400">|</span>
           <span>By {author}</span>
@@ -248,5 +250,6 @@ function NewsCard({ story, onClick }: NewsCardProps) {
     </article>
   );
 }
+
 
 

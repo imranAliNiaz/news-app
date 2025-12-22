@@ -148,7 +148,6 @@ export default function SearchNewsGrid({
 function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => void }) {
   const img = story.multimedia?.[0];
 
-
   const published = new Date(story.published_date);
   const publishedLabel = isNaN(published.getTime())
     ? ""
@@ -159,16 +158,12 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
 
   const author =
     story.byline?.replace(/^By\s+/i, "") || "New York Times";
-  const sectionLabel = story.section
-    ? story.section.toUpperCase()
-    : "NEWS";
 
   return (
     <article
       className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-[0_10px_35px_rgba(0,0,0,0.08)] transition hover:-translate-y-1 cursor-pointer"
       onClick={onClick}
     >
-
       {img && img.url ? (
         <div className="relative h-56 w-full">
           <Image
@@ -184,18 +179,19 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
         </div>
       )}
 
-
       <div className="flex flex-1 flex-col px-6 py-5">
-        <h3 className="mb-3 text-lg font-semibold leading-snug text-slate-900">
+        {/* 🟥 HEADING */}
+        <h3 className="mb-3 font-heading text-[18px] font-semibold leading-[27px] text-slate-900">
           {story.title}
         </h3>
 
-        <p className="mb-5 text-sm leading-relaxed text-slate-600">
+        {/* 🟩 DESCRIPTION */}
+        <p className="mb-5 font-description text-[15px] font-normal leading-[22px] text-slate-600">
           {story.abstract}
         </p>
 
-
-        <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+        {/* ⚫ META ROW */}
+        <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
           {publishedLabel && (
             <>
               <span className="font-medium text-slate-600">
@@ -208,7 +204,6 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
           <span className="text-slate-400">|</span>
           <span>4 min read</span>
         </div>
-
 
         <div className="mt-4 flex items-center justify-center gap-10 border-t border-slate-200 pt-3 text-xs text-slate-500">
           <button className="flex items-center gap-1 hover:text-[#C31815]">
@@ -227,3 +222,4 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
     </article>
   );
 }
+
