@@ -85,9 +85,14 @@ export async function searchNews(query: string): Promise<NytStory[]> {
   url.searchParams.set("api-key", NYT_API_KEY || "");
   url.searchParams.set("sort", "relevance"); // or "newest"
 
+  // const res = await fetch(url.toString(), {
+  //   next: { revalidate: 60 }, // cache for 1 minute
+  // });
+
   const res = await fetch(url.toString(), {
-    next: { revalidate: 60 }, // cache for 1 minute
+    cache: "no-store",
   });
+
 
   if (!res.ok) {
     console.error("NYT Search API error", await res.text());
@@ -100,40 +105,64 @@ export async function searchNews(query: string): Promise<NytStory[]> {
 
 
   const stories: NytStory[] = docs.map((doc: NytSearchDoc) => {
-    // ✅ Pick a "best" image if multimedia exists
-    let multimedia: NytMultimedia[] = [];
+    const multimedia: NytMultimedia[] = [];
 
     if (Array.isArray(doc.multimedia) && doc.multimedia.length > 0) {
-      // Prefer the widest image
-      const best = [...doc.multimedia].sort(
-        (a, b) => (b.width ?? 0) - (a.width ?? 0)
-      )[0];
+      console.log("🔎 ARTICLE:", doc.headline?.main);
+      console.log("🖼 RAW multimedia (Array):", doc.multimedia);
 
+      const imageCandidates = doc.multimedia.filter(
+        (m) =>
+          m.url &&
+          (m.subtype === "xlarge" ||
+            m.subtype === "jumbo" ||
+            m.subtype === "superJumbo")
+      );
 
-      const rawUrl: string = best?.url ?? "";
+      console.log("✅ IMAGE CANDIDATES:", imageCandidates);
 
-      // Article Search usually returns something like "images/2024/01/01/..."
-      let absoluteUrl = rawUrl;
-      if (rawUrl && !rawUrl.startsWith("http")) {
-        if (rawUrl.startsWith("/")) {
-          absoluteUrl = `https://static01.nyt.com${rawUrl}`;
-        } else {
-          absoluteUrl = `https://static01.nyt.com/${rawUrl}`;
-        }
+      const best =
+        imageCandidates[0] ??
+        doc.multimedia.find((m) => m.url); // Fallback: Pick ANY image with a URL
+
+      console.log("⭐ BEST IMAGE PICKED:", best);
+
+      if (best?.url) {
+        const absoluteUrl = best.url.startsWith("http")
+          ? best.url
+          : `https://static01.nyt.com/${best.url.replace(/^\//, "")}`;
+
+        console.log("🌐 FINAL IMAGE URL:", absoluteUrl);
+
+        multimedia.push({
+          url: absoluteUrl,
+          caption: best.caption || "",
+          format: best.subtype || "unknown",
+          height: best.height || 0,
+          width: best.width || 0,
+        });
       }
+    } else if (doc.multimedia && typeof doc.multimedia === "object") {
+      // Handle case where multimedia is an object (e.g. valid "sports" search results)
+      console.log("🔎 ARTICLE:", doc.headline?.main);
+      console.log("🖼 RAW multimedia (Object):", doc.multimedia);
 
-      if (absoluteUrl) {
-        multimedia = [
-          {
-            url: absoluteUrl,
-            caption: best.caption,
-            format: best.subtype,
-            height: best.height,
-            width: best.width,
-          },
-        ];
+      const m = doc.multimedia as any;
+      const target = m.default || m.thumbnail; // Prefer default, fallback to thumbnail
+
+      if (target && target.url) {
+        multimedia.push({
+          url: target.url,
+          caption: m.caption || "",
+          format: "default",
+          height: target.height || 0,
+          width: target.width || 0,
+        });
+        console.log("🌐 FINAL IMAGE URL (from Object):", target.url);
       }
     }
+
+
 
     return {
       url: doc.web_url,

@@ -169,7 +169,7 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
       onClick={onClick}
     >
 
-      {img && img.url && (
+      {img && img.url ? (
         <div className="relative h-56 w-full">
           <Image
             src={img.url}
@@ -177,6 +177,10 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
             fill
             className="object-cover"
           />
+        </div>
+      ) : (
+        <div className="flex h-56 w-full items-center justify-center bg-slate-100 text-slate-400">
+          <span className="text-sm">No image available</span>
         </div>
       )}
 
