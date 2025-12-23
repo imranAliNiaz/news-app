@@ -128,8 +128,9 @@ export interface SearchClientProps {
     title: string;
     query: string;
     slicesData: {
-        searchBar: Content.SearchBarSlice;
-        header: Content.HeaderSlice;
-        footer: Content.FooterSlice;
+        header: Content.MainnavigationDocument;
+        searchBar: Content.SearchbarDocument;
+        footer: Content.SimplefooterDocument;
     };
 }
+

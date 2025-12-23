@@ -123,6 +123,7 @@ export default function SearchNewsGrid({
 function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => void }) {
   const img = story.multimedia?.[0];
 
+
   const published = new Date(story.published_date);
   const publishedLabel = isNaN(published.getTime())
     ? ""

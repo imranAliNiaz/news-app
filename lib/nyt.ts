@@ -1,4 +1,5 @@
-import { NytStory, NytSearchDoc } from "@/types/types";
+import { NytStory, NytSearchDoc, NytMultimedia } from "@/types/types";
+
 
 /**
  * 🗂️ Map a navigation label to a valid NYT API section
@@ -62,30 +63,74 @@ export function filterValidStories(stories: NytStory[]): NytStory[] {
  * 🔍 Helper to transform Search Docs to NytStory format
  */
 export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
+  console.log('🔍 [DEBUG] mapSearchDocsToStories called with', docs.length, 'docs');
   if (!Array.isArray(docs)) return [];
 
-  return docs.map((doc) => ({
-    section: doc.section_name || "search",
-    subsection: "",
-    title: doc.headline.main,
-    abstract: doc.abstract || doc.snippet || "",
-    url: doc.web_url,
-    uri: doc.uri,
-    byline: doc.byline?.original || "By New York Times",
-    item_type: "Article",
-    updated_date: doc.pub_date,
-    created_date: doc.pub_date,
-    published_date: doc.pub_date,
-    material_type_facet: "",
-    kicker: doc.headline.kicker || "",
-    des_facet: [],
-    org_facet: [],
-    per_facet: [],
-    geo_facet: [],
-    multimedia: doc.multimedia,
-    short_url: "",
-  }));
+  return docs.map((doc) => {
+    const multimedia: NytMultimedia[] = [];
+
+    if (Array.isArray(doc.multimedia) && doc.multimedia.length > 0) {
+      const imageCandidates = doc.multimedia.filter(
+        (m) =>
+          m.url &&
+          (m.subtype === "xlarge" ||
+            m.subtype === "jumbo" ||
+            m.subtype === "superJumbo")
+      );
+
+      const best =
+        imageCandidates[0] ??
+        doc.multimedia.find((m) => m.url);
+
+      if (best?.url) {
+        multimedia.push({
+          url: best.url.startsWith("http")
+            ? best.url
+            : `https://static01.nyt.com/${best.url.replace(/^\//, "")}`,
+          caption: best.caption || "",
+          format: best.subtype || "unknown",
+          height: best.height || 0,
+          width: best.width || 0,
+          type: "image",
+          subtype: best.subtype || "",
+          copyright: "",
+        });
+      }
+    }
+
+    const story = {
+      section: doc.section_name || "search",
+      subsection: "",
+      title: doc.headline.main,
+      abstract: doc.abstract || doc.snippet || doc.lead_paragraph || "",
+      url: doc.web_url,
+      uri: doc.uri,
+      byline: doc.byline?.original || "By New York Times",
+      item_type: "Article",
+      updated_date: doc.pub_date,
+      created_date: doc.pub_date,
+      published_date: doc.pub_date,
+      material_type_facet: "",
+      kicker: doc.headline.kicker || "",
+      des_facet: [],
+      org_facet: [],
+      per_facet: [],
+      geo_facet: [],
+      multimedia,
+      short_url: "",
+    };
+
+    console.log('📰 [DEBUG] Mapped story:', {
+      title: story.title,
+      abstract: story.abstract.substring(0, 50),
+      hasImage: multimedia.length > 0,
+      imageUrl: multimedia[0]?.url
+    });
+
+    return story;
+  });
 };
+
 
 /**
  * 🔍 Filter for Search Results (Wrapper)

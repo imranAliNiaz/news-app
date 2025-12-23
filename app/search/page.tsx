@@ -28,7 +28,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   if (query) {
     try {
       const rawStories = await searchNytNews(query);
-      stories = filterValidStories(rawStories);
+      console.log('🔍 [DEBUG - page.tsx] Raw stories count:', rawStories.length);
+      stories = rawStories; // DEBUG: filterValidStories(rawStories);
+      console.log('✅ [DEBUG - page.tsx] Stories passed to UI:', stories.length);
       title = `Search results for "${query}"`;
     } catch (e) {
       stories = [];
