@@ -63,30 +63,29 @@ export function filterValidStories(stories: NytStory[]): NytStory[] {
  * 🔍 Helper to transform Search Docs to NytStory format
  */
 export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
-  console.log('🔍 [DEBUG] mapSearchDocsToStories called with', docs.length, 'docs');
   if (!Array.isArray(docs)) return [];
 
   return docs.map((doc) => {
-    const multimedia: NytMultimedia[] = [];
+    let imageMeta: NytMultimedia | null = null;
 
+    // ✅ CASE 1: multimedia is an ARRAY
     if (Array.isArray(doc.multimedia) && doc.multimedia.length > 0) {
-      const imageCandidates = doc.multimedia.filter(
+      const preferred = doc.multimedia.find(
         (m) =>
           m.url &&
-          (m.subtype === "xlarge" ||
-            m.subtype === "jumbo" ||
-            m.subtype === "superJumbo")
+          ["superJumbo", "jumbo", "xlarge"].includes(m.subtype || "")
       );
 
-      const best =
-        imageCandidates[0] ??
-        doc.multimedia.find((m) => m.url);
+      const fallback = doc.multimedia.find((m) => m.url);
+      const best = preferred || fallback;
 
       if (best?.url) {
-        multimedia.push({
-          url: best.url.startsWith("http")
-            ? best.url
-            : `https://static01.nyt.com/${best.url.replace(/^\//, "")}`,
+        const url = best.url.startsWith("http")
+          ? best.url
+          : `https://static01.nyt.com/${best.url.replace(/^\//, "")}`;
+
+        imageMeta = {
+          url,
           caption: best.caption || "",
           format: best.subtype || "unknown",
           height: best.height || 0,
@@ -94,15 +93,38 @@ export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
           type: "image",
           subtype: best.subtype || "",
           copyright: "",
-        });
+        };
       }
     }
 
-    const story = {
+    // ✅ CASE 2: multimedia is an OBJECT (THIS WAS MISSING)
+    else if (doc.multimedia && typeof doc.multimedia === "object") {
+      const m: any = doc.multimedia;
+      const target = m.default || m.thumbnail;
+
+      if (target?.url) {
+        imageMeta = {
+          url: target.url,
+          caption: m.caption || "",
+          format: "article",
+          height: target.height || 0,
+          width: target.width || 0,
+          type: "image",
+          subtype: "default",
+          copyright: m.credit || "",
+        };
+      }
+    }
+
+    return {
       section: doc.section_name || "search",
       subsection: "",
       title: doc.headline.main,
-      abstract: doc.abstract || doc.snippet || doc.lead_paragraph || "",
+      abstract:
+        doc.abstract ||
+        doc.lead_paragraph ||
+        doc.snippet ||
+        "",
       url: doc.web_url,
       uri: doc.uri,
       byline: doc.byline?.original || "By New York Times",
@@ -116,20 +138,14 @@ export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
       org_facet: [],
       per_facet: [],
       geo_facet: [],
-      multimedia,
+      multimedia: imageMeta ? [imageMeta] : [],
       short_url: "",
     };
-
-    console.log('📰 [DEBUG] Mapped story:', {
-      title: story.title,
-      abstract: story.abstract.substring(0, 50),
-      hasImage: multimedia.length > 0,
-      imageUrl: multimedia[0]?.url
-    });
-
-    return story;
   });
 };
+
+
+
 
 
 /**
