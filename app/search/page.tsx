@@ -1,6 +1,8 @@
-import { getTopStories, searchNews, filterValidStories, filterSearchStories } from "@/lib/nyt";
+import { searchNytNews, fetchNytTopStories } from "@/services/newsService";
+import { filterValidStories, mapSearchDocsToStories } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
 import SearchClient from "@/app/components/SearchClient";
+import { NytStory } from "@/types/types";
 
 type SearchPageProps = {
   searchParams: Promise<{
@@ -20,17 +22,24 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     client.getSingle("simplefooter"),
   ]);
 
-  let stories;
-  let title;
+  let stories: NytStory[] = [];
+  let title = "Latest News";
 
   if (query) {
-    const rawStories = await searchNews(query);
-    stories = filterSearchStories(rawStories);
-    title = `Search results for "${query}"`;
+    try {
+      const rawStories = await searchNytNews(query);
+      stories = filterValidStories(rawStories);
+      title = `Search results for "${query}"`;
+    } catch (e) {
+      stories = [];
+    }
   } else {
-    const topStoriesData = await getTopStories("world");
-    stories = filterValidStories(topStoriesData.results);
-    title = "Latest News";
+    try {
+      const topStoriesData = await fetchNytTopStories("world");
+      stories = filterValidStories(topStoriesData.results);
+    } catch (e) {
+      stories = [];
+    }
   }
 
   return (

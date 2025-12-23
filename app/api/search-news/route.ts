@@ -1,27 +1,24 @@
-// app/api/search-news/route.ts
 import { NextResponse } from "next/server";
-import { searchNews } from "@/lib/nyt";
+import { searchNytNews } from "@/services/newsService";
+import { NytStory } from "@/types/types";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const q = searchParams.get("q")?.trim();
-  console.log(q)
+  const query = searchParams.get("query")?.trim();
 
-  if (!q) {
+  if (!query) {
     return NextResponse.json(
-      { results: [], error: "Missing query parameter ?q=" },
+      { results: [], error: "Missing query parameter" },
       { status: 400 }
     );
   }
 
   try {
-    const results = await searchNews(q);
-    console.log(results)
+    const results = await searchNytNews(query);
     return NextResponse.json({ results });
   } catch (error: any) {
-    console.error("SearchNews API route error", error);
     return NextResponse.json(
-      { results: [], error: "Failed to fetch search results" },
+      { results: [], error: error.message || "Failed to search news" },
       { status: 500 }
     );
   }

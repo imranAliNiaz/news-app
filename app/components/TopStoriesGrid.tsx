@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { filterValidStories } from "@/lib/nyt";
-import { NytStory } from "@/constants/types";
+import { NytStory } from "@/types/types";
 import { FiGrid, FiList } from "react-icons/fi";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
-import { useNewsCategory } from "./NewsProvider";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCategory } from "@/store/newsSlice";
+import { useTopStories } from "@/hooks/useTopStories";
 import NewsModal from "./NewsModal";
 
 interface TopStoriesGridProps {
@@ -20,45 +22,31 @@ export default function TopStoriesGrid({
   initialStories = [],
   title = "Top Stories",
 }: TopStoriesGridProps) {
-  const { selectedCategory, setSelectedCategory } = useNewsCategory();
+  const dispatch = useAppDispatch();
+  const selectedCategory = useAppSelector((state) => state.news.selectedCategory);
+  const { data: articles, isLoading: loading, error } = useTopStories(selectedCategory);
+
   const tabs = ["Latest Stories", "Politics", "Fashion"];
   const [activeTab, setActiveTab] = useState(tabs[0]);
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
-  const [stories, setStories] = useState<NytStory[]>(initialStories);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
   const [visibleCount, setVisibleCount] = useState(6);
 
+  // Use initialStories if provided and we are loading or no data yet?
+  // Actually, useTopStories handles fetching.
+  // If we want SSR data to be initial data for React Query, we can pass it, 
+  // but `initialStories` might be stale if category changed.
+  // We'll rely on the hook's data, defaulting to initialStories if !data and !loading?
+  // Or just use the hook data primarily.
+  // "The UI is pixel-perfect". logic should be similar.
+
+  const displayStories = articles || initialStories;
+  // If useTopStories matches selectedCategory, `articles` will be fresh.
+
+  // Update active tab based on selectedCategory if needed, or just let user click.
+  // Original code: onClick -> setActiveTab & setSelectedCategory.
 
   useEffect(() => {
-    const fetchStories = async () => {
-      setLoading(true);
-      setError(null);
-      setVisibleCount(6);
-
-      try {
-        const response = await fetch(
-          `/api/top-stories?section=${encodeURIComponent(selectedCategory)}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch stories");
-        }
-
-        const data = await response.json();
-        const validStories = filterValidStories(data.results);
-        setStories(validStories);
-      } catch (err) {
-        console.error("Error fetching stories:", err);
-        setError("Failed to load news. Please try again.");
-        setStories([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStories();
+    setVisibleCount(6);
   }, [selectedCategory]);
 
 
@@ -80,9 +68,9 @@ export default function TopStoriesGrid({
                 key={tab}
                 onClick={() => {
                   setActiveTab(tab);
-                  if (tab === "Latest Stories") setSelectedCategory("world");
-                  else if (tab === "Politics") setSelectedCategory("politics");
-                  else if (tab === "Fashion") setSelectedCategory("fashion");
+                  if (tab === "Latest Stories") dispatch(setCategory("world"));
+                  else if (tab === "Politics") dispatch(setCategory("politics"));
+                  else if (tab === "Fashion") dispatch(setCategory("fashion"));
                 }}
                 className={`cursor-pointer pb-[6px] text-[18px] leading-[1] tracking-normal transition font-body text-[#2A2A2A] ${activeTab === tab
                   ? "border-b-2 border-red-500 font-semibold text-slate-900"
@@ -120,14 +108,14 @@ export default function TopStoriesGrid({
 
         {error && !loading && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
-            {error}
+            {error instanceof Error ? error.message : "An error occurred"}
           </div>
         )}
 
 
         {!loading && !error && (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {stories.slice(0, visibleCount).map((story) => (
+            {displayStories.slice(0, visibleCount).map((story) => (
               <NewsCard
                 key={story.url}
                 story={story}
@@ -138,14 +126,14 @@ export default function TopStoriesGrid({
         )}
 
 
-        {!loading && !error && stories.length === 0 && (
+        {!loading && !error && displayStories.length === 0 && (
           <div className="text-center py-20 text-slate-500">
             <p className="text-lg">No stories available for this category.</p>
           </div>
         )}
 
 
-        {stories.length > visibleCount && (
+        {displayStories.length > visibleCount && (
           <div className="mt-8 flex justify-center">
             <button
               onClick={() => setVisibleCount((prev) => prev + 6)}

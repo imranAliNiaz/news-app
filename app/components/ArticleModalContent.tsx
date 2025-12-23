@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
-import { NytStory } from "@/constants/types";
+import { NytStory } from "@/types";
 
 interface ArticleModalContentProps {
     story: NytStory;

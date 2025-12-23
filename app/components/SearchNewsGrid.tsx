@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { NytStory } from "@/constants/types";
+import { NytStory } from "@/types/types";
 
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
 
-import { filterValidStories } from "@/lib/nyt";
-import { useNewsCategory } from "./NewsProvider";
+import { useAppSelector } from "@/store/hooks";
+import { useTopStories } from "@/hooks/useTopStories";
 import NewsModal from "./NewsModal";
 
 interface SearchNewsGridProps {
@@ -19,75 +19,50 @@ export default function SearchNewsGrid({
   stories: initialStories,
   title = "Search Results",
 }: SearchNewsGridProps) {
-  const { selectedCategory } = useNewsCategory();
-  // We'll use local state for stories so we can update them when category changes
-  const [stories, setStories] = useState<NytStory[]>(initialStories);
+  const selectedCategory = useAppSelector((state) => state.news.selectedCategory);
+
+  // Hook always runs.
+  const { data: categoryStories, isLoading: categoryLoading, error: categoryError } = useTopStories(selectedCategory);
+
   const [visibleCount, setVisibleCount] = useState(6);
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  // Track if we are in "search mode" (initial props) or "category mode" (updates)
-  // Actually, we can just detect if selectedCategory changes.
-  // But wait, initially selectedCategory might be "world" (default).
-  // If we are on search page with query, we want to show query results first.
-  // Only when user CLICKS a category (changing context) should we update.
-  // But context is shared. If user searches, they are on /search. selectedCategory is whatever it was.
-  // To detect "User clicked category", we rely on the fact that MainNavigation updates selectedCategory.
-  // We need a ref to track if it's the first render (search results) or subsequent (category switch).
+  // Logic: 
+  // If initialStories provided (Search Page Result), show them initially.
+  // If selectedCategory changes, user wants to see category news.
+  // We use a flag or just check if selectedCategory matches 'world' (default) ?? 
+  // No, easier: track if we are in "Search Mode".
+  // If query is present (passed from parent), we are in search mode.
+  // BUT the parent SearchPage passes `stories` directly.
+  // If user clicks a category in `MainNavigation`, `selectedCategory` updates.
+  // We want to switch to showing `categoryStories`.
 
-  const [isFirstRender, setIsFirstRender] = useState(true);
-
-  useEffect(() => {
-    // On mount, we just show initialStories.
-    // If selectedCategory changes AFTER mount, we fetch new stories.
-    if (isFirstRender) {
-      setIsFirstRender(false);
-      return;
-    }
-
-    const fetchStories = async () => {
-      setLoading(true);
-      setError(null);
-      setVisibleCount(6);
-
-      try {
-        const response = await fetch(
-          `/api/top-stories?section=${encodeURIComponent(selectedCategory)}`
-        );
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch stories");
-        }
-
-        const data = await response.json();
-        const validStories = filterValidStories(data.results);
-        setStories(validStories);
-      } catch (err) {
-        console.error("Error fetching stories:", err);
-        setError("Failed to load news. Please try again.");
-        setStories([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStories();
-  }, [selectedCategory]);
+  const [showCategoryNews, setShowCategoryNews] = useState(false);
+  const [prevCategory, setPrevCategory] = useState(selectedCategory);
 
   useEffect(() => {
-    // If initialStories changes (e.g. new search), update stories
-    // But we need to be careful not to overwrite category selection if that was the intent.
-    // However, if the parent passes new props (new search query), we should probably respect it.
-    if (initialStories) {
-      setStories(initialStories);
-      setIsFirstRender(true); // Reset so we don't immediately refetch based on category
+    if (selectedCategory !== prevCategory) {
+      setShowCategoryNews(true);
+      setPrevCategory(selectedCategory);
     }
+  }, [selectedCategory, prevCategory]);
+
+  // If props.stories change (new search), reset to show search results
+  useEffect(() => {
+    setShowCategoryNews(false);
   }, [initialStories]);
 
   useEffect(() => {
     setVisibleCount(6);
-  }, [stories]);
+  }, [showCategoryNews, initialStories, categoryStories]);
+
+  const displayStories = showCategoryNews ? (categoryStories || []) : initialStories;
+  const loading = showCategoryNews ? categoryLoading : false;
+  const error = showCategoryNews ? (categoryError ? "Failed to load" : null) : null;
+
+
+
+
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-10">
@@ -105,13 +80,13 @@ export default function SearchNewsGrid({
 
       {error && !loading && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-center">
-          {error}
+          {typeof error === "string" ? error : "An error occurred"}
         </div>
       )}
 
       {!loading && !error && (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {stories.slice(0, visibleCount).map((story) => (
+          {displayStories.slice(0, visibleCount).map((story) => (
             <SearchNewsCard
               key={story.url}
               story={story}
@@ -122,7 +97,7 @@ export default function SearchNewsGrid({
       )}
 
 
-      {!loading && !error && stories.length > visibleCount && (
+      {!loading && !error && displayStories.length > visibleCount && (
         <div className="mt-5 flex justify-center">
           <button
             onClick={() => setVisibleCount((prev) => prev + 6)}

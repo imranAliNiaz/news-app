@@ -1,12 +1,16 @@
-import { getTopStories, filterValidStories } from "@/lib/nyt";
+import { fetchNytTopStories } from "@/services/newsService";
+import { filterValidStories } from "@/lib/nyt";
 import { createClient } from "@/prismicio";
 import HomeClient from "@/app/components/HomeClient";
 
 export default async function Home() {
   const client = createClient();
 
-  const [topStoriesData, page1, page, page2, page3, page4, page5] = await Promise.all([
-    getTopStories("world"),
+  // Parallel fetching
+  const topStoriesPromise = fetchNytTopStories("world").catch(() => ({ results: [] }));
+
+  const [topStoriesResponse, page1, page, page2, page3, page4, page5] = await Promise.all([
+    topStoriesPromise,
     client.getSingle("mainnavigation"),
     client.getSingle("hamza"),
     client.getSingle("navbar"),
@@ -15,7 +19,7 @@ export default async function Home() {
     client.getSingle("simplefooter"),
   ]);
 
-  const stories = filterValidStories(topStoriesData.results); // filter valid stories dynamically
+  const stories = filterValidStories(topStoriesResponse.results || []);
 
   return (
     <HomeClient

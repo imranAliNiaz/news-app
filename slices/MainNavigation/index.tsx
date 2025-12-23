@@ -8,7 +8,8 @@ import { PrismicNextImage } from "@prismicio/next";
 import { FaAnglesRight } from "react-icons/fa6";
 import { CiUser, CiSearch } from "react-icons/ci";
 import { RiMenu3Fill } from "react-icons/ri";
-import { useNewsCategory } from "@/app/components/NewsProvider";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { setCategory } from "@/store/newsSlice";
 import { mapCategoryToSection } from "@/lib/nyt";
 
 export type MainNavigationProps =
@@ -17,7 +18,8 @@ export type MainNavigationProps =
 const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const { selectedCategory, setSelectedCategory } = useNewsCategory();
+  const dispatch = useAppDispatch();
+  const selectedCategory = useAppSelector((state) => state.news.selectedCategory);
 
   const handleSearchClick = () => {
     router.push("/search");
@@ -29,7 +31,7 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
 
   const handleCategoryClick = (label: string) => {
     const section = mapCategoryToSection(label);
-    setSelectedCategory(section);
+    dispatch(setCategory(section));
 
     if (pathname && pathname.startsWith("/search")) {
       return;
