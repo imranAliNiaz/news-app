@@ -15,11 +15,10 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
 }) => {
   const items = slice.primary.items || [];
 
-  // ✅ RESPONSIVE ITEMS PER SLIDE
   const getItemsPerSlide = () => {
     if (typeof window === "undefined") return 1;
-    if (window.innerWidth >= 1024) return 2; // desktop
-    return 1; // mobile + tablet
+    if (window.innerWidth >= 1024) return 2;
+    return 1;
   };
 
   const [itemsPerSlide, setItemsPerSlide] = useState(1);
@@ -33,7 +32,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
     return () => window.removeEventListener("resize", update);
   }, []);
 
-  // Build slides dynamically
   const slides = useMemo(() => {
     const chunks: (typeof items[number])[][] = [];
     for (let i = 0; i < items.length; i += itemsPerSlide) {
@@ -42,12 +40,9 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
     return chunks;
   }, [items, itemsPerSlide]);
 
-  // Reset slide index when layout changes
   useEffect(() => {
     setCurrentSlide(0);
   }, [itemsPerSlide]);
-
-  // Auto carousel
   useEffect(() => {
     if (!slides.length) return;
     const id = setInterval(() => {
@@ -66,7 +61,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
       data-slice-variation={slice.variation}
       className="mx-auto max-w-7xl px-4 py-10"
     >
-      {/* SECTION TITLE */}
       <div className="mb-6 flex items-center gap-2">
         <h2 className="text-lg font-semibold text-gray-900">
           {slice.primary.section_title}
@@ -74,7 +68,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
         <span className="text-yellow-500 text-xl">★</span>
       </div>
 
-      {/* CAROUSEL */}
       <div className="relative overflow-hidden">
         <div
           className="flex transition-transform duration-500 ease-out"
@@ -90,7 +83,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
                   key={index}
                   className="flex flex-col gap-4 md:flex-row"
                 >
-                  {/* IMAGE */}
                   <div className="h-48 w-full overflow-hidden rounded-lg md:h-28 md:w-40 flex-shrink-0">
                     <PrismicNextImage
                       field={item.media}
@@ -98,7 +90,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
                     />
                   </div>
 
-                  {/* TEXT */}
                   <div className="flex flex-col">
                     <div className="text-sm font-semibold leading-5 text-gray-900">
                       <PrismicRichText field={item.title} />
@@ -115,7 +106,6 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
         </div>
       </div>
 
-      {/* DOTS */}
       {slides.length > 1 && (
         <div className="mt-8 flex justify-center gap-2">
           {slides.map((_, index) => (
@@ -123,8 +113,8 @@ const HighlightedContentCarousel: FC<HighlightedContentCarouselProps> = ({
               key={index}
               onClick={() => goToSlide(index)}
               className={`h-1 rounded-full transition ${index === currentSlide
-                  ? "w-6 bg-red-600"
-                  : "w-3 bg-red-300"
+                ? "w-6 bg-red-600"
+                : "w-3 bg-red-300"
                 }`}
               aria-label={`Go to slide ${index + 1}`}
             />

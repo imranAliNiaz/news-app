@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchNytNews } from "@/services/newsService";
-import { NytStory } from "@/types/types";
+
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

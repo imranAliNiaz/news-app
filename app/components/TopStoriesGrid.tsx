@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { filterValidStories } from "@/lib/nyt";
-import { NytStory } from "@/types/types";
-import { FiGrid, FiList } from "react-icons/fi";
+import type { NytStory, TopStoriesGridProps, NewsCardProps } from "@/types/types";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
@@ -13,10 +11,7 @@ import { setCategory } from "@/store/newsSlice";
 import { useTopStories } from "@/hooks/useTopStories";
 import NewsModal from "./NewsModal";
 
-interface TopStoriesGridProps {
-  initialStories?: NytStory[];
-  title?: string;
-}
+
 
 export default function TopStoriesGrid({
   initialStories = [],
@@ -31,19 +26,7 @@ export default function TopStoriesGrid({
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
   const [visibleCount, setVisibleCount] = useState(6);
 
-  // Use initialStories if provided and we are loading or no data yet?
-  // Actually, useTopStories handles fetching.
-  // If we want SSR data to be initial data for React Query, we can pass it, 
-  // but `initialStories` might be stale if category changed.
-  // We'll rely on the hook's data, defaulting to initialStories if !data and !loading?
-  // Or just use the hook data primarily.
-  // "The UI is pixel-perfect". logic should be similar.
-
   const displayStories = articles || initialStories;
-  // If useTopStories matches selectedCategory, `articles` will be fresh.
-
-  // Update active tab based on selectedCategory if needed, or just let user click.
-  // Original code: onClick -> setActiveTab & setSelectedCategory.
 
   useEffect(() => {
     setVisibleCount(6);
@@ -53,11 +36,6 @@ export default function TopStoriesGrid({
   return (
     <>
       <section className="mx-auto max-w-7xl px-4 py-0 lg:py-10">
-
-
-
-
-
 
         {/* Tabs */}
         <div className="mb-2 flex h-[54px] max-w-[1368px] items-center justify-between border-b border-slate-200 bg-white/85 px-4 backdrop-blur-[28px]">
@@ -94,9 +72,6 @@ export default function TopStoriesGrid({
             </button>
           </div>
         </div>
-
-
-
 
 
         {loading && (
@@ -158,11 +133,6 @@ export default function TopStoriesGrid({
   );
 }
 
-type NewsCardProps = {
-  story: NytStory;
-  onClick: () => void;
-};
-
 function NewsCard({ story, onClick }: NewsCardProps) {
   const img = story.multimedia?.[0];
 
@@ -193,17 +163,13 @@ function NewsCard({ story, onClick }: NewsCardProps) {
       )}
 
       <div className="flex flex-1 flex-col px-6 py-5">
-        {/* 🔴 HEADING */}
         <h3 className="mb-3 font-heading text-[18px] font-semibold leading-[27px] text-slate-900">
           {story.title}
         </h3>
-
-        {/* 🟩 DESCRIPTION */}
         <p className="mb-5 font-description text-[15px] font-normal leading-[22px] text-slate-600">
           {story.abstract}
         </p>
 
-        {/* ⚫ META ROW */}
         <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
           <span className="font-medium text-slate-600">{publishedLabel}</span>
           <span className="text-slate-400">|</span>

@@ -23,12 +23,9 @@ const AnnouncementBar: FC<AnnouncementBarProps> = ({ slice }) => {
             lg:rounded-md
           "
         >
-          {/* Button / label */}
           <div className="bg-white text-[#C31815] font-semibold text-sm uppercase px-4 py-2 md:py-4 rounded whitespace-nowrap">
             {slice.primary.label}
           </div>
-
-          {/* Message */}
           <div className="font-body text-[20px] font-medium leading-[15px] tracking-[0] text-white text-center sm:text-left">
             <PrismicRichText field={slice.primary.message} />
           </div>

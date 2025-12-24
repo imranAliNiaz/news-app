@@ -53,7 +53,6 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
   return (
     <header className="sticky top-0 z-50 bg-white w-full shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
-        {/* LEFT — LOGO */}
         <div className="flex items-center shrink-0 cursor-pointer">
           <PrismicNextImage
             field={slice.primary.logo}
@@ -62,7 +61,6 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
           />
         </div>
 
-        {/* MIDDLE — NAV LINKS */}
         <nav className="hidden md:flex items-center gap-8 flex-1 justify-center">
           {slice.primary.nav_links.map((item, index) => {
             const section = mapCategoryToSection(item.label || "");
@@ -98,7 +96,6 @@ const MainNavigation: FC<MainNavigationProps> = ({ slice }) => {
           </span>
         </nav>
 
-        {/* RIGHT — ICONS */}
         <div className="flex items-center gap-4 text-gray-700 shrink-0">
           <CiUser
             size={22}

@@ -4,12 +4,9 @@ import Image from "next/image";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
 import { BsBookmark } from "react-icons/bs";
-import { NytStory } from "@/types";
+import type { ArticleModalContentProps } from "@/types/types";
 
-interface ArticleModalContentProps {
-    story: NytStory;
-    onClose?: () => void;
-}
+
 
 export default function ArticleModalContent({
     story,
@@ -51,22 +48,22 @@ export default function ArticleModalContent({
             </div>
 
             <div className="flex w-full flex-col gap-4 px-6 py-6 md:w-1/2 md:py-8">
-                {/* 🔴 TRENDING */}
+
                 <span className="font-body text-[14px] font-semibold leading-[2.1] tracking-[0.02em] text-[#C31815]">
                     Trending
                 </span>
 
-                {/* 🟥 TITLE */}
+
                 <h2 className="font-heading text-[18px] md:text-[24px] font-semibold leading-[27px] text-slate-900">
                     {story.title}
                 </h2>
 
-                {/* 🟩 DESCRIPTION */}
+
                 <p className="font-description text-[15px] font-normal leading-[22px] text-slate-600">
                     {story.abstract}
                 </p>
 
-                {/* ⚫ META ROW */}
+
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
                     {publishedLabel && (
                         <>
@@ -93,7 +90,7 @@ export default function ArticleModalContent({
                     </button>
                 </div>
 
-                {/* 🔴 READ FULL ARTICLE */}
+
                 <div className="mt-4">
                     <a
                         href={story.url}

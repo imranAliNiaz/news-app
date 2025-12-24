@@ -12,18 +12,16 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Pre-fill from current URL (?query=...)
   const [value, setValue] = useState(searchParams.get("query") ?? "");
 
-  // Sync state with URL params
   useEffect(() => {
     setValue(searchParams.get("query") ?? "");
   }, [searchParams]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const q = value.trim();
-    router.push(q ? `/search?query=${encodeURIComponent(q)}` : "/search");
+    const query = value.trim();
+    router.push(query ? `/search?query=${encodeURIComponent(query)}` : "/search");
   };
 
   return (
@@ -33,7 +31,6 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
       className="bg-[#F4F6F8] py-32"
     >
       <div className="mx-auto max-w-3xl px-4 text-center">
-        {/* Title */}
         <PrismicRichText
           field={slice.primary.title}
           components={{
@@ -56,7 +53,6 @@ const SearchBar: FC<SearchBarProps> = ({ slice }) => {
         />
 
 
-        {/* Search input */}
         <form onSubmit={handleSubmit} className="relative mx-auto mt-2 w-full">
           <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
             <CiSearch size={18} />

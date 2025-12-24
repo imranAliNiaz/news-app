@@ -27,7 +27,6 @@ const SimpleFooter: FC<SimpleFooterProps> = ({ slice }) => {
             lg:gap-16
           "
         >
-          {/* SECTION 1 — LOGO + COPYRIGHT */}
           <div className="flex flex-col items-center space-y-2 md:space-y-4 lg:space-y-6">
             <PrismicNextImage
               field={slice.primary.logo}
@@ -38,7 +37,6 @@ const SimpleFooter: FC<SimpleFooterProps> = ({ slice }) => {
             </p>
           </div>
 
-          {/* SECTION 2 — LEGAL LINKS (DESKTOP ONLY) */}
           <div className="hidden flex-col items-center space-y-2 lg:flex">
             {slice.primary.legal_links.map((item, index) => (
               <PrismicNextLink
@@ -49,9 +47,7 @@ const SimpleFooter: FC<SimpleFooterProps> = ({ slice }) => {
             ))}
           </div>
 
-          {/* SECTION 3 — NAV + SOCIAL */}
           <div className="flex flex-col items-center space-y-6">
-            {/* NAV LINKS */}
             <div
               className="
                 flex
@@ -72,7 +68,6 @@ const SimpleFooter: FC<SimpleFooterProps> = ({ slice }) => {
               ))}
             </div>
 
-            {/* SOCIAL ICONS */}
             <div className="flex items-center justify-center gap-6">
               <Image src="/icons/footer-icon-1.png" alt="" width={28} height={28} />
               <Image src="/icons/footer-icon-2.png" alt="" width={28} height={28} />

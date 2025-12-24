@@ -6,7 +6,7 @@ import { mapSearchDocsToStories } from "@/lib/nyt";
 const NYT_API_KEY = process.env.NYT_API_KEY || process.env.NEXT_PUBLIC_NYT_API_KEY;
 const BASE_URL = "https://api.nytimes.com/svc";
 
-// Server-side direct calls (using keys)
+
 export const fetchNytTopStories = async (section: string): Promise<TopStoriesResponse> => {
     if (!NYT_API_KEY) throw new Error("NYT_API_KEY is not configured");
 
@@ -30,7 +30,7 @@ export const searchNytNews = async (query: string): Promise<NytStory[]> => {
     return mapSearchDocsToStories(response.data.response.docs);
 };
 
-// Client-side fetchers (Call our API Routes)
+
 export const getTopStories = async (section: string): Promise<NytStory[]> => {
     const response = await axiosInstance.get<{ results: NytStory[] }>("/top-stories", {
         params: { section },

@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { NytStory } from "@/types/types";
+import type {
+  NytStory,
+  SearchNewsGridProps,
+  SearchNewsCardProps,
+} from "@/types/types";
+
 
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
@@ -10,10 +15,6 @@ import { useAppSelector } from "@/store/hooks";
 import { useTopStories } from "@/hooks/useTopStories";
 import NewsModal from "./NewsModal";
 
-interface SearchNewsGridProps {
-  stories: NytStory[];
-  title?: string;
-}
 
 export default function SearchNewsGrid({
   stories: initialStories,
@@ -21,21 +22,11 @@ export default function SearchNewsGrid({
 }: SearchNewsGridProps) {
   const selectedCategory = useAppSelector((state) => state.news.selectedCategory);
 
-  // Hook always runs.
   const { data: categoryStories, isLoading: categoryLoading, error: categoryError } = useTopStories(selectedCategory);
 
   const [visibleCount, setVisibleCount] = useState(6);
   const [selectedStory, setSelectedStory] = useState<NytStory | null>(null);
 
-  // Logic: 
-  // If initialStories provided (Search Page Result), show them initially.
-  // If selectedCategory changes, user wants to see category news.
-  // We use a flag or just check if selectedCategory matches 'world' (default) ?? 
-  // No, easier: track if we are in "Search Mode".
-  // If query is present (passed from parent), we are in search mode.
-  // BUT the parent SearchPage passes `stories` directly.
-  // If user clicks a category in `MainNavigation`, `selectedCategory` updates.
-  // We want to switch to showing `categoryStories`.
 
   const [showCategoryNews, setShowCategoryNews] = useState(false);
   const [prevCategory, setPrevCategory] = useState(selectedCategory);
@@ -47,7 +38,6 @@ export default function SearchNewsGrid({
     }
   }, [selectedCategory, prevCategory]);
 
-  // If props.stories change (new search), reset to show search results
   useEffect(() => {
     setShowCategoryNews(false);
   }, [initialStories]);
@@ -59,9 +49,6 @@ export default function SearchNewsGrid({
   const displayStories = showCategoryNews ? (categoryStories || []) : initialStories;
   const loading = showCategoryNews ? categoryLoading : false;
   const error = showCategoryNews ? (categoryError ? "Failed to load" : null) : null;
-
-
-
 
 
   return (
@@ -120,7 +107,7 @@ export default function SearchNewsGrid({
   );
 }
 
-function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => void }) {
+function SearchNewsCard({ story, onClick }: SearchNewsCardProps) {
   const img = story.multimedia?.[0];
 
 
@@ -156,17 +143,13 @@ function SearchNewsCard({ story, onClick }: { story: NytStory; onClick: () => vo
       )}
 
       <div className="flex flex-1 flex-col px-6 py-5">
-        {/* 🟥 HEADING */}
         <h3 className="mb-3 font-heading text-[18px] font-semibold leading-[27px] text-slate-900">
           {story.title}
         </h3>
-
-        {/* 🟩 DESCRIPTION */}
         <p className="mb-5 font-description text-[15px] font-normal leading-[22px] text-slate-600">
           {story.abstract}
         </p>
 
-        {/* ⚫ META ROW */}
         <div className="mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 font-body text-[13px] font-normal leading-[1.65] text-slate-500">
           {publishedLabel && (
             <>

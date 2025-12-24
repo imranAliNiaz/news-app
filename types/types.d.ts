@@ -134,3 +134,52 @@ export interface SearchClientProps {
     };
 }
 
+
+// Component Prop Types
+
+export interface TopStoriesGridProps {
+    initialStories?: NytStory[];
+    title?: string;
+}
+
+export interface NewsCardProps {
+    story: NytStory;
+    onClick: () => void;
+}
+
+
+// Search Page Component Props
+
+export interface SearchNewsGridProps {
+    stories: NytStory[];
+    title?: string;
+}
+
+export interface SearchNewsCardProps {
+    story: NytStory;
+    onClick: () => void;
+}
+
+// Modal Component Props
+
+export interface NewsModalProps {
+    story: NytStory;
+    onClose: () => void;
+}
+
+
+// Search Article Modal Props
+
+export interface ArticleModalContentProps {
+    story: NytStory;
+    onClose?: () => void;
+}
+
+
+// Search Page (Server Component) Props
+
+export interface SearchPageProps {
+    searchParams: Promise<{
+        query?: string;
+    }>;
+}

@@ -13,14 +13,12 @@ const FeaturedContentCards: FC<FeaturedContentCardsProps> = ({ slice }) => {
       data-slice-type={slice.slice_type}
       data-slice-variation={slice.variation}
     >
-      {/* Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {slice.primary.cards.map((item, index) => (
           <div
             key={index}
             className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200"
           >
-            {/* Image */}
             <div className="w-full h-56 overflow-hidden">
               <PrismicNextImage
                 field={item.thumbnail_image}
@@ -28,26 +26,20 @@ const FeaturedContentCards: FC<FeaturedContentCardsProps> = ({ slice }) => {
               />
             </div>
 
-            {/* Content */}
             <div className="p-5">
-              {/* Title */}
               <h2 className="text-xl font-semibold text-gray-900 leading-tight mb-3">
                 <PrismicRichText field={item.title} />
               </h2>
-
-              {/* Description */}
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
                 <PrismicRichText field={item.description} />
               </p>
 
-              {/* Meta Info */}
               <div className="text-sm text-gray-500 mb-4 flex items-center gap-2">
                 <span>{item.timestamp}</span>
                 <span>• {item.author}</span>
                 <span>• {item.read_time}</span>
               </div>
 
-              {/* Footer Icons */}
               <div className="flex justify-between items-center border-t pt-3 text-sm text-gray-600">
                 <div className="flex items-center gap-2">
                   ❤️ <span>{item.likes_count}</span>
@@ -64,7 +56,6 @@ const FeaturedContentCards: FC<FeaturedContentCardsProps> = ({ slice }) => {
         ))}
       </div>
 
-      {/* ⭐ New Row for "View More" Button */}
       <div className="flex justify-center mt-12">
         <button className="bg-white border border-gray-300 text-gray-800 px-6 py-3 rounded-md shadow-sm hover:shadow-md transition">
           View More

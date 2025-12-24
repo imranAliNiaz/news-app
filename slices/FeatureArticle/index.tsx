@@ -17,12 +17,8 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
       data-slice-variation={slice.variation}
       className="w-full"
     >
-      {/* ✅ MAX-WIDTH CONTAINER (LIKE ANNOUNCEMENT BAR) */}
       <div className="mx-auto max-w-7xl px-4">
-        {/* FLEX WRAPPER */}
         <div className="flex flex-col lg:flex-row lg:items-center lg:gap-16 pt-4 sm:pt-6 lg:pt-10 pb-0 lg:pb-10">
-
-          {/* LEFT — IMAGE */}
           <div className="relative w-full lg:flex-[3]">
             <div className="relative aspect-[16/9] overflow-hidden shadow-xl">
               <PrismicNextImage
@@ -31,7 +27,6 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
                 fallbackAlt=""
               />
 
-              {/* OVERLAY TITLE — MOBILE + TABLET */}
               <div className="absolute inset-0 flex items-end bg-linear-to-t from-black/70 to-transparent p-5 lg:hidden">
                 <div className="max-w-[90%] font-heading text-[24px] sm:text-[28px] font-semibold leading-none text-white">
                   <PrismicRichText field={slice.primary.title} />
@@ -40,10 +35,8 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
             </div>
           </div>
 
-          {/* RIGHT — TEXT (DESKTOP ONLY) */}
           <div className="hidden lg:flex lg:flex-[2] flex-col justify-center">
 
-            {/* TAG + ICONS */}
             <div className="mb-3 flex items-center justify-between">
               <p className="font-body text-[14px] font-semibold leading-[2.1] tracking-[0.02em] text-red-500">
                 {slice.primary.tag}
@@ -55,17 +48,14 @@ const FeatureArticle: FC<FeatureArticleProps> = ({ slice }) => {
               </div>
             </div>
 
-            {/* TITLE */}
             <div className="mb-4 font-heading text-[32px] font-semibold leading-none text-gray-900">
               <PrismicRichText field={slice.primary.title} />
             </div>
 
-            {/* SUMMARY */}
             <div className="mb-6 max-w-[640px] font-body text-[15px] font-normal leading-[1.65] text-gray-600">
               <PrismicRichText field={slice.primary.summary} />
             </div>
 
-            {/* META */}
             <div className="flex items-center gap-4 font-body text-[13px] font-normal leading-[1.65] text-gray-500">
               {slice.primary.post_time && <span>{slice.primary.post_time}</span>}
               {slice.primary.author_name && <span>{slice.primary.author_name}</span>}

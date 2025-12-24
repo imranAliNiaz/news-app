@@ -1,10 +1,6 @@
 import { NytStory, NytSearchDoc, NytMultimedia } from "@/types/types";
 
 
-/**
- * 🗂️ Map a navigation label to a valid NYT API section
- * Supports automatic mapping with fallback to "world"
- */
 export function mapCategoryToSection(label: string): string {
   const validSections = [
     "arts", "automobiles", "books", "business", "fashion", "food",
@@ -16,12 +12,9 @@ export function mapCategoryToSection(label: string): string {
 
   const normalized = label.toLowerCase().trim();
 
-  // Direct match
   if (validSections.includes(normalized)) {
     return normalized;
   }
-
-  // Common mappings
   const mappings: Record<string, string> = {
     "tech": "technology",
     "entertainment": "arts",
@@ -39,14 +32,9 @@ export function mapCategoryToSection(label: string): string {
     return mappings[normalized];
   }
 
-  // Fallback to world
   return "world";
 }
-
-/**
- * 🧹 Filter out stories that are missing critical content
- * Returns only stories that have title, abstract, and at least one image
- */
+// Filter out stories that are missing critical content
 export function filterValidStories(stories: NytStory[]): NytStory[] {
   if (!Array.isArray(stories)) return [];
 
@@ -59,16 +47,16 @@ export function filterValidStories(stories: NytStory[]): NytStory[] {
   });
 }
 
-/**
- * 🔍 Helper to transform Search Docs to NytStory format
- */
+
+
+// Helper to transform Search Docs to NytStory format
 export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
   if (!Array.isArray(docs)) return [];
 
   return docs.map((doc) => {
     let imageMeta: NytMultimedia | null = null;
 
-    // ✅ CASE 1: multimedia is an ARRAY
+
     if (Array.isArray(doc.multimedia) && doc.multimedia.length > 0) {
       const preferred = doc.multimedia.find(
         (m) =>
@@ -97,7 +85,7 @@ export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
       }
     }
 
-    // ✅ CASE 2: multimedia is an OBJECT (THIS WAS MISSING)
+
     else if (doc.multimedia && typeof doc.multimedia === "object") {
       const m: any = doc.multimedia;
       const target = m.default || m.thumbnail;
@@ -145,12 +133,6 @@ export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
 };
 
 
-
-
-
-/**
- * 🔍 Filter for Search Results (Wrapper)
- */
 export function filterSearchStories(stories: NytStory[]): NytStory[] {
   return filterValidStories(stories);
 }
