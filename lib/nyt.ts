@@ -34,7 +34,7 @@ export function mapCategoryToSection(label: string): string {
 
   return "world";
 }
-// Filter out stories that are missing critical content
+
 export function filterValidStories(stories: NytStory[]): NytStory[] {
   if (!Array.isArray(stories)) return [];
 
@@ -49,7 +49,6 @@ export function filterValidStories(stories: NytStory[]): NytStory[] {
 
 
 
-// Helper to transform Search Docs to NytStory format
 export const mapSearchDocsToStories = (docs: NytSearchDoc[]): NytStory[] => {
   if (!Array.isArray(docs)) return [];
 

@@ -6,7 +6,6 @@ import HomeClient from "@/app/components/HomeClient";
 export default async function Home() {
   const client = createClient();
 
-  // Parallel fetching
   const topStoriesPromise = fetchNytTopStories("world").catch(() => ({ results: [] }));
 
   const [topStoriesResponse, page1, page, page2, page3, page4, page5] = await Promise.all([

@@ -6,6 +6,6 @@ export const useTopStories = (section: string) => {
     return useQuery<NytStory[], Error>({
         queryKey: ["topStories", section],
         queryFn: () => getTopStories(section),
-        staleTime: 1000 * 60 * 5, // 5 minutes
+        staleTime: 1000 * 60 * 5,
     });
 };
